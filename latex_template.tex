@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Examples of the new environments
+
+\begin{theorem}[Pythagoras]
+	For a right triangle with sides $a,b$ and hypotenuse $c$,
+	\begin{equation}
+		a^2 + b^2 = c^2.
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	We compute:
+	\begin{align*}
+		(a+b)^2 & = a^2 + 2ab + b^2, \\
+		(a-b)^2 & = a^2 - 2ab + b^2.
+	\end{align*}
+	Subtracting and rearranging gives the desired result.
+\end{proof}
+
+\begin{lemma}
+	For $n \in \N$,
+	\[
+		\sum_{k=1}^n k = \frac{n(n+1)}{2}.
+	\]
+\end{lemma}
+
+\begin{remark}
+	You can replace the word “Theorem” with “Lemma”, “Proposition”, “Definition”, etc.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+% This package simply sets the margins to be 1 inch.
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{marvosym}% This adds the contradiction command (\Lightning)
+% These packages include nice commands from AMS-LaTeX
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Define an environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+
+% define shortcut commands for commonly used symbols
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\nR}{\mathcal{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\xk}{x_k}
+\newcommand{\yk}{y_k}
+\newtheorem*{remark}{Remark}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\begin{document}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Review for Exams
+\end{center}
+\section{Numerical Linear Algebra }
+
+\subsection{Convergence of Matrix Splits}
+Common Problems
+\begin{itemize}
+	\item prove that a given matrix split Converges
+	\item prove the gershgorin disc theorem
+	\item Matrix norms (Prove 1s or infinity norm of a matrix)
+\end{itemize}
+
+Common Methods/tools:
+\begin{itemize}
+	\item Gershgorin Disc theorem
+	\item irreducible diagonally dominant matrices are invertible
+	\item Perron Frobenius theorem
+	\item write out the cholesky decomposition
+	\item write out definition (even the stupid supremums or limits)
+	\item gershgorin disc theorem
+	\item irreducible diagonally dominant matrices are invertible
+	\item perron frobenius theorem
+	\item write out the cholesky decomposition
+	\item gershgorin disc theorem
+	\item irreducible diagonally dominant matrices are invertible
+	\item perron frobenius theorem
+\end{itemize}
+
+\subsection{Decompositions}
+Common Problems
+\begin{itemize}
+	\item Perform Householder Decompositions
+	\item Prove Multiplication by unitary matrix is backwards stable
+	\item growth factors of LU with pivoting
+	\item Positive definite matrices have nonzero diagonals
+	\item prove existence of SVD
+\end{itemize}
+
+Common tools:
+\begin{itemize}
+	\item Write out exact algorithm
+	\item Unitary matrices are preserved under 2 and F norms.
+	\item Definition of Backwards stability
+\end{itemize}
+
+\subsection{Error Analysis}
+Common Problems
+\begin{itemize}
+	\item Prove something is stable
+	\item Prove something is backwards stable
+	\item Find the relative error (forward error)
+	\item find the absolute error
+	\item find the (relative) condition number of a problem
+\end{itemize}
+
+Common Tools
+
+\section{Numerical Methods for ODEs/PDEs}
+
+\subsection{Convergence for IVPs}
+Common Problems:
+\begin{itemize}
+	\item Prove that given multi-step method is consistent
+	\item Prove the given multi-step method is stable
+	\item Give an example of why being unstable could ruin things
+	\item prove that something is Lax-richetmeyer stable
+\end{itemize}
+
+Common methods for solving such problems
+\begin{itemize}
+	\item Taylor expansion
+	\item $p(s)-z\sigma(s)$
+	\item Neumann Analysis
+	\item equivalence theorems
+	\item Consistency + Lax Richtemeyer stablity $\implies$ Convergence
+	\item Dhalquist Stability theorem
+	\item Prove zero stability
+\end{itemize}
+
+\subsection{BVP}
+Common Problems
+\begin{itemize}
+	\item Give the extrapolation method
+	\item Describe method for solving nonlinear equations
+	\item Give error formula
+	\item Write out what the matrices might look like
+\end{itemize}
+
+Tools for solving problems
+\begin{itemize}
+	\item Taylor Series
+\end{itemize}
+\\
+\subsection{Advection Equation stuff}
+Common Problems
+\begin{itemize}
+	\item Give the Lax-freidericks, Wendroff, or upwind method
+	\item Determine what the particular method is equivalent to.
+	\item Talk about why the upwind method is the way it is.
+\end{itemize}
+
+\end{document}

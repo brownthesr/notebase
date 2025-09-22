@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 5.1.10
+\begin{exercise}{5.1.10}
+	To prove this we just use the mean value theorem take:
+	\begin{align}
+		d(g(x),g(y))\leq g'(c)d(x,y)\text{ for some }c\in [a,b] \\
+		\leq \alpha d(x,y)
+	\end{align}
+	And if $\alpha < 1$ then this converges by the banach fixed point theorem.
+\end{exercise}
+
+% Exercise 5.2.8
+\begin{exercise}{5.2.8}
+	To prove this we will walk through the argument
+	\begin{align}
+		d(y,w)=d(Tx,Tz)                                                                                                     \\
+		=\sqrt{\sum\limits_{j=1}^{n}\left(\eta_j-\omega_j\right)^2}                                                         \\
+		=\sqrt{\sum\limits_{j=1}^{n}(\sum_{k=1}^nc_{jk}(\xi_k-\zeta_k))^2}                                                  \\
+		\leq \sum_k\sqrt{\sum\limits_{j=1}^{n}(c_{jk}(\xi_k-\zeta_k))^2}\text{ by triangle inequality since this is a norm} \\
+		\leq \sum_k\sqrt{\sum\limits_{j=1}^{n}c_{jk}^2(\xi_k-\zeta_k)^2}                                                    \\
+		\leq \sum_k|\xi_k-\zeta_k|\sqrt{\sum\limits_{j=1}^{n}c_{jk}^2}                                                      \\
+	\end{align}
+	We can now apply cauchy shwartz. set $a_k=|\xi_k-\zeta_k|,b_k=\sqrt{\sum\limits_{j=1}^{n}c_{jk}^2}$
+	\begin{align}
+		\leq ||x-z||_{2}\sqrt{\sum_{j,k}c_{jk}^2} \\
+		\leq d(x,z)\sqrt{\sum_{j,k}c_{jk}^2}
+	\end{align}
+	Thus for the contraction mapping to apply we need $\sqrt{\sum_{j,k}c_{jk}^2}<1$ or equivalently $\sum_{j,k}c_{jk}^2<1$
+	% TODO: Think Cauchy-shwartz
+\end{exercise}
+
+% Exercise 5.3.6
+\begin{exercise}{5.3.6}
+	To show this let $y$ be a limit point of $\tilde C$ by definition of limit poitn there exists $y_n\rightarrow y, y_n\in \tilde C$
+	\begin{align}
+		|y_n(t)-x_0|\leq c\beta
+	\end{align}
+	Note that since the absolute valiue function is continuous, we can take limits here and obtain"
+	\begin{align}
+		|y(t)-x_0|\leq c\beta
+	\end{align}"
+	This is because inequalities are preserved under limits (non strict at least). So $\tilde C$ contains its limit points thus it is closed
+\end{exercise}
+
+
+% Exercise 2.2.14
+\begin{exercise}{2.2.14}
+	We show that the metric:
+	\begin{align}
+		\tilde{d}(x,x)=0,\tilde d(x,y)+d(x,y)+1
+	\end{align}
+	cannot come from a norm.
+
+	Assume that it came from a norm then it should satisfy scalar preservation:
+	\begin{align}
+		||ax||_{ \tilde{d}}=||ax-a0||_{ \tilde{d}} \\
+		=\tilde d(ax,0)                            \\
+		=d(ax,0)+1                                 \\
+		=||ax||_d+1                                \\
+		=|a|||x||+1
+	\end{align}
+	Note that we do not have the scalar preservation here. So it is not induced by a norm.
+\end{exercise}
+\end{document}

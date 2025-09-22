@@ -1,0 +1,389 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% NOTE: ONE OF THESE WILL Be on the quals
+% Exercise 3.1
+\begin{exercise}{3.1}
+	For parts a and be we first prove a preliminary. Take
+	\begin{align}
+		\frac{d}{dt}g(\phi_t(x))=\nabla g(\phi_t(x))\cdot \frac{d}{dt}\phi_t(x) \\
+		=\nabla g(\phi_t(x))\cdot f(t,\phi_t(x))                                \\
+	\end{align}
+	From here we will assume that $\phi_t(x)$ is close to the boundary $\partial U$ or that $g(\phi_t(x))$ is small. Let the element of the boundary its closest to be $x_b\in \partial U$
+
+	% NOTE: Note that when proving things with this remember to start with the derivativeof the invariant set function applied to the flow map
+
+	\begin{align}
+		=(\nabla g(\phi_t(x))-\nabla g(x_b))\cdot f(t,\phi_t(x))+\nabla g(x_b)\cdot f(t,\phi_t(x)) \\
+		\text{by the fact that }\nabla g(x_b)\cdot f(t,x_b)=-|\nabla g(x_b)|v(x_b)\cdot f(t,x_b)=0 \\
+		=(\nabla g(\phi_t(x))-\nabla g(x_b))\cdot f(t,\phi_t(x))+\nabla g(x_b)\cdot (f(t,\phi_t(x))-f(t,x_b))
+	\end{align}
+	From here we take absolute values:
+	\begin{align}
+		|\frac{d}{dt}g(\phi_t(x))| \leq |(\nabla g(\phi_t(x))-\nabla g(x_b))\cdot f(t,\phi_t(x))|+|\nabla g(x_b)\cdot (f(t,\phi_t(x))-f(t,x_b))| \\
+		\text{by cauchy schwartz}                                                                                                                \\
+		\leq |\nabla g(\phi_t(x))-\nabla g(x_b)||f(t,\phi_t(x))|+|\nabla g(x_b)||f(t,\phi_t(x))-f(t,x_b)|                                        \\
+	\end{align}
+	From here note that because f is continuous on a bounded domain then we can bound it above by some $|f|<M$. Similarly for $|\nabla g|<K$ so:
+	\begin{align}
+		\leq  |\nabla g(\phi_t(x))-\nabla g(x_b)|M+K|f(t,\phi_t(x))-f(t,x_b)|            \\
+		\leq  |\nabla g(\phi_t(x))-\nabla g(x_b)|M+KL|\phi_t(x)-x_b| \text{ by lipshitz} \\
+	\end{align}
+	Note that because $g(\phi_t(x))$ is small it is well approximated by a taylor  series around $x_b$ $\nabla g(\phi_t(x))\approx \nabla g(x_b)+D^2g(x_b)(\phi_t(x)-x_b)+h(\phi_t(x))(\phi_t(x)-x_b))$ note that because we are considering small $g$ we will have that $\phi_t(x)$ is close to $x_b$. From this since the peano form of the remainder approaches zero when that exact thing happens. we can choose a sufficiently small radius so that $h_(\phi_t(x))<\epsilon$  So we can plug that into our equations:
+	\begin{align}
+		\leq |\nabla g(x_b)+D^2g(x_b)(\phi_t(x)-x_b) + \epsilon (\phi_t(x)-x_b)-\nabla g(x_b)|M+KL|\phi_t(x)-x_b| \\
+		= |(D^2g(x_b)+\epsilon)(\phi_t(x)-x_b)|M+KL|\phi_t(x)-x_b|                                                \\
+	\end{align}
+	Note that because g is smooth then this $D^2g(x_b)$ is also bounded call this bound $N=D^2g(x_b)+\epsilon$:
+
+	\textbf{Remark}: Above we used a taylor series expansion to bound $|\nabla g(\phi_t(x))-\nabla g(x_b)|$ however one could also note that smooth functions on bounded sets are also lipshitz so then it immideiately follows that:
+	$|\nabla g(\phi_t(x))-\nabla g(x_b)|\leq N(\phi_t(x)-x_b)$. On a similar note I could have noted that since $\nabla g$ is lipshitz continuous on the bounded domain, then the dot product of two lipshitz functions on a bounded domain is also lipshitz. Then I could have just take $|\frac{d}{dt}g(\phi_t(x))|=|Dg(\phi_t(x))f(t,\phi_t(x))|=|Dg(\phi_t(x))f(t,\phi_t(x))-Dg(x_b)f(t,x_b)|\leq L|\phi_t(x)-x_b|$ for some constant L. Things are a lot quicker in retrospect. But either way, we go back to the main argument!
+
+	\begin{align}
+		\leq (NM+KL)|\phi_t(x)-x_b|
+	\end{align}
+	So calling $NM+KL=A$ then we have:
+	\begin{align}
+		|\frac{d}{dt}g(\phi_t(x))|\leq A|\phi_t(x)-x_b|
+	\end{align}
+	or equivalently:
+	\begin{align}
+		-A|\phi_t(x)-x_b|\leq \frac{d}{dt}g(\phi_t(x))\leq A|\phi_t(x)-x_b|
+	\end{align}
+	Note from here that this distance $|\phi_t(x)-x_b|$ is literally the definition of $g$ as the signed distance (note that its an absolute value, but we will only consider $\phi_t(x)$ that is inside or on the boundary so this is eqivalent to the signed distance). We take r small enough so $x_b$ is the unique closest point is the unique closest point.
+	\begin{align}
+		-Ag(\phi_t(x))\leq \frac{d}{dt}g(\phi_t(x))\leq Ag(\phi_t(x))
+	\end{align}
+	We can then solve this differential inequality (after integrating both sides we can apply the lower and upper gronwall bounds) to get:
+	\begin{align}
+		g(\phi_0(x))-\int_0^tAg(\phi_t(x))\leq g(\phi_t(x))\leq g(\phi_0(x))+\int_0^t Ag(\phi_t(x)) \\
+		g(\phi_0(x))e^{-At}\leq g(\phi_t(x)) \leq e^{At}g(\phi_0(x))
+	\end{align}
+	\textbf{Remark:} For completeness the lower gronwall bound states if $x(t)\geq A-\int_0^tg(s)x(s)$ for nonnegative functions and nonnegative A then $x(t)\geq Ae^{-\int_0^tg(s)ds}$. To prove this take the derivative of both sides to get: $x'(t)\geq -g(t)x(t)\implies x'(t)+g(t)x(t)\geq 0$ applying the integrating factor we get: $\frac{d}{dt}(e^{\int_0^tg(s)ds}x(t))\geq 0$ integrating from 0 to t we get: $e^{\int_0^tg(s)ds}x(t)-x(0)\geq 0\implies x(t)\geq e^{-\int_0^tg(s)ds}x(0)$ but $x(0)\geq A$ so $x(t)\geq Ae^{-\int_0^t g(s)ds}$. Returning to the problem:
+
+	Noting the the fact that $\phi_0(x)=x$
+	\begin{align}
+		g(x)e^{-At}\leq g(\phi_t(x)) \leq e^{At}g(x)
+	\end{align}
+	From here we are ready to prove our theorems.
+
+	% \textbf{alternative proof (not answer)}: After looking at my previous proof, I realized there may be an easier way to go about this take:
+	% \begin{align}
+	% 	|\frac{d}{dt}g(\phi_t(x))|=|Dg(\phi_t(x))f(t,\phi_t(x))|                                   \\
+	% 	\text{by the fact that }\nabla g(x_b)\cdot f(t,x_b)=-|\nabla g(x_b)|v(x_b)\cdot f(t,x_b)=0 \\
+	% 	=|Dg(\phi_t(x))f(t,\phi_t(x)) - Dg(x_b)f(t,x_b)|
+	% \end{align}
+	% for an $x_b$ on the boundary of $U$. then:
+	% \begin{align}
+	% 	=|\int_0^1 \frac{d}{ds}(Dg(x_b+ s(\phi_t(x)- x_b))f(t,x_b+s(\phi_t(x)-x_b)))ds| \\
+	% 	=|\int_0^1 (D^2g(x_b+ s(\phi_t(x)- x_b))f(t,x_b+s(\phi_t(x)-x_b))               \\+Dg(x_b+ s(\phi_t(x)- x_b))f'(t,x_b+s(\phi_t(x)-x_b)))(\phi_t(x)-x_b)ds| \\
+	% \end{align}
+
+	a) for this part assume that $x=x_0\in \partial U$ then we know that $g(x_0)=0$ and clearly our previous theorem applies because $g(x_0)=0$ is small:
+	\begin{align}
+		0=g(x_0)e^{-At}\leq g(\phi_t(x_0))\leq e^{At}g(x_0)=0 \\
+		g(\phi_t(x_0))=0
+	\end{align}
+	So this is an invariant subspace because for all time t  we will always thus be on the border.
+
+	b) For this part assume that we start inside the set $U$. Note that if we never approach the border then clearly our solution is invariant. However if it does approach the border all of the problems will always occur near the border because our solution is continuous. By the intermediate value theorem if it were to leave our set it would have to get near the border first. For this reason without loss of generality we consider a $x_0$ close enough to the border so our previous theorem applies. thus:
+	\begin{align}
+		g(\phi_t(x_0))\geq g(x_0)e^{-At}>0
+	\end{align}
+	So if we start inside the set U we will always have a positive distance away from the boundary thus $g(\phi_t(x_0))\in U$
+
+	c) For the firs part note that at time zero (if $x_0\in \partial U$):
+	\begin{align}
+		\frac{d}{dt}g(\phi_0(x_0))=\nabla g(x_0)\cdot f(t,x_0)=-|\nabla g(x_0)|v(x_0)\cdot f(t,x_b)>0
+	\end{align}
+	Note that because we are doing time $t=0$ I just plugged in $\phi_0(x_0)=x_0$
+
+	By continuity of this time derivative $\frac{d}{dt}g(\phi_0(x_0))$ we know that there is a small neighborhood of t $t\in [0,\delta]$ with $\frac{d}{dt}g(\phi_t(x_0))>0$. So if we integrate this  we get:
+	\begin{align}
+		0<g(\phi_t(x_0))-g(\phi_0(x_0))= g(\phi_t(x_0))-g(x_0) \\
+		=g(\phi_t(x_0))\text{ since }x_0\in \partial U
+	\end{align}
+	So there is a time period which the path leaves the boundary and enters $U$. So this is not invariant.
+
+	Now in contrast if we start inside of U $x_0\in U$ then take $t^*=\inf\{t:g(\phi_t(x))=0\}$ to be the first time that our solution hits the boundary. Since we know that $g$ is positive inside of $U$ that mean that $\frac{d}{dt}g(\phi_t(x_0))\leq 0$ is nonpositive. However notice that $\phi_{t^*}(x_0)\in \partial U$ so we can apply our inequality:
+	\begin{align}
+		\frac{d}{dt}g(\phi_{t^*}(x_0))=\nabla g(\phi_{t^*}(x_0))\cdot f(t,\phi_{t^*}(x_0))=-|\nabla g(\phi_{t^*}(x_0))|v(\phi_{t^*}(x_0))\cdot f(t,\phi_{t^*}(x_0))>0
+	\end{align}
+	but this is a contradiction. So this time does not exist our may be infinite. Thus our solution always stays within U. As a result $U$ is an invariant subspace.
+\end{exercise}
+
+% Exercise 3,2
+\begin{exercise}{3,2}
+	To prove this we use the corollary proved in the lecture notes namely that:
+	\begin{align}
+		\det(A)(B)=\det(A)\tr(A^{-1}B)
+	\end{align}
+	We also use familiar properties of matrix exponentials such as $\frac{d}{dt}e^{At}=e^{At}A$ For rationale behind these matrix exponentials read \textit{Foundations of Applied Mathematics, Volume 1: Mathematical Analysis} (Jeffrey Humpherys, Tyler J. Jarvis and Emily J. Evans).
+
+	take:
+	\begin{align}
+		\frac{d}{dt}\det(e^{At}) \\
+		=\det'(e^{At})(e^{At}A)
+	\end{align}
+	(Using the same notation in the slides were we are taking the derivative at the point A in the direction of B $\det'(A)(B)$). (Note that the inverse here exists because we proved it in class)
+	\begin{align}
+		=\det(e^{At})\tr((e^{At})^{-1}e^{At}A) \\
+		=\det(e^{At})\tr(A)
+	\end{align}
+	Thus we have the differential equation:
+	\begin{align}
+		\frac{d}{dt}\det(e^{At})=\det(e^{At})\tr(A)
+	\end{align}
+	Solving this differential equation we get:
+	\begin{align}
+		\det(e^{At})=\det(e^{A(0)})e^{\tr(A)t} \\
+		=\det(I)e^{\tr(A)t}                    \\
+		=e^{\tr(A)t}
+	\end{align}
+	Pluggin in $t=1$ yields the theorem:
+	\begin{align}
+		\det(e^{A})=e^{\tr(A)}
+	\end{align}
+	% NOTE: remember the derivative of the determinant
+\end{exercise}
+
+% Exercise 3.3
+\begin{exercise}{3.3}
+
+	\textbf{My Fundamental theorem of Exponential Matrices:}
+
+	% NOTE: Memorize this bound
+	First note that because all of the eigenvalues of A are distinct and have negative real part then we can bound $e^{At}$ by:
+	\begin{align}
+		|e^{At}|\leq Ke^{-\sigma t}
+	\end{align}
+	for $K,\sigma >0$. Proof:
+
+	Since The eigenvalues are all distinct then this matrix is diagonalizable so:
+	\begin{align}
+		e^{At}=Ve^{\Lambda t}V^{-1}            \\
+		|e^{At}|\leq|V||e^{\Lambda t}||V^{-1}| \\
+		=K|e^{\Lambda t}|
+	\end{align}
+	Where $K= |V||V^{-1}|$ which is finite and positive (because A is finite dimensional):
+	\begin{align}
+		=K|e^{\Lambda t}| \\
+	\end{align}
+	Note that for each j $|e^{\lambda_j t}|= e^{\text{real}(\lambda) t}$
+
+	Because we are taking the two norm in this case. setting $\sigma = -\mu_k$ ($\mu_k$ is the largest real part of any eigenvalue):
+	\begin{align}
+		=Ke^{-\sigma t}
+	\end{align} \qed
+
+	I use this theorem a ton in this problem and the next
+
+	\textbf{My Answer:}
+
+	We can use duhamels principle to solve this linear ode:
+	\begin{align}
+		x(t)=e^{At}x_0+\int_0^te^{A(t-s)}g(s)ds                              \\
+		|x(t)|\leq |e^{At}||x_0|+\int_0^t |e^{A(t-s)}|g(s)|ds                \\
+		\leq Ke^{-\sigma t}|x_0|+\int_0^t Ke^{-\sigma(t-s)}|g(s)|ds          \\
+		\leq Ke^{-\sigma t}|x_0|+Ke^{-\sigma t}\int_0^t e^{\sigma s}|g(s)|ds \\
+	\end{align}
+	First note that the first term abtrarily approaches zero because of the bound on the exponential.
+
+	From here note that because $|g(s)|\rightarrow 0$ there is a time l when $s>l$ means $g(s)<\epsilon$ then:
+	\begin{align}
+		Ke^{-\sigma t}\int_0^t e^{\sigma t}|g(s)|ds                                                      \\
+		=Ke^{-\sigma t}\int_0^l e^{\sigma s}|g(s)|ds+ Ke^{-\sigma t}\int_l^t e^{\sigma s}|g(s)|ds        \\
+		\leq Ke^{-\sigma t}\int_0^l e^{\sigma s}|g(s)|ds+ Ke^{-\sigma t}\int_l^t e^{\sigma s}\epsilon ds \\
+		\leq Ke^{-\sigma t}\int_0^l e^{\sigma l}|g(s)|ds+ Ke^{-\sigma t}\int_l^t e^{\sigma s}\epsilon ds \\
+		\leq Ke^{-\sigma (t-l)}\int_0^l |g(s)|ds+ Ke^{-\sigma t}\int_l^t e^{\sigma s}\epsilon ds         \\
+	\end{align}
+	Note that because $g(s)$ is continuous it is bounded over this compact interval say by M:
+	\begin{align}
+		\leq Ke^{-\sigma (t-l)}M(l-0) + Ke^{-\sigma t}\int_l^t e^{\sigma s}\epsilon ds                  \\
+		\leq Ke^{-\sigma (t-l)}M(l-0) + \epsilon Ke^{-\sigma t}\int_l^t e^{\sigma s} ds                 \\
+		\leq Ke^{-\sigma (t-l)}M(l-0) + \epsilon Ke^{-\sigma t}\frac{e^{\sigma t}-e^{\sigma l}}{\sigma} \\
+		\leq Ke^{-\sigma (t-l)}Ml + \epsilon K\frac{1-e^{-\sigma (t-l)}}{\sigma}                        \\
+	\end{align}
+	now notice that clearly the term on the left goes to zero as t approaches infinity  (a negative exponential multiplied by positive coeficients). And the term on the left also goes to zero because one term is a negative exponential again (and multiplied by epsilon) and also multiplied by some arbitrarily small epsilon that we chose.
+
+	Thus $|x(t)|\rightarrow 0$ Since all of the terms in duhamels princple when bounded go to zero.
+	\begin{align}
+		Ke^{-\sigma t}|x_0|\rightarrow 0                                                                                     \\
+		Ke^{-\sigma t}\int_0^t e^{\sigma s}|g(s)|ds \leq Ke^{-\sigma (t-l)}Ml + \epsilon K\frac{1-e^{-\sigma (t-l)}}{\sigma} \\
+		Ke^{-\sigma (t-l)}Ml\rightarrow 0                                                                                    \\
+		\epsilon K\frac{1-e^{-\sigma (t-l)}}{\sigma}  \rightarrow 0                                                          \\
+	\end{align}
+	Note that we can always choose l to make epsilon as small as we like. So choose an arbitrarily small epsilon and we will get a corresponding finite l. Since l is still finite then the given exponentials will still approach zero after enough time.
+
+	if $g(t)\rightarrow g_0\neq 0$ then our solution behaves more like:
+	\begin{align}
+		x(t)=e^{At}x_0+\int_0^te^{A(t-s)}g(s)ds                             \\
+		x(t)=e^{At}x_0+\int_0^te^{A(t-s)}g_0+\int_0^te^{A(t-s)}(g(s)-g_0)ds \\
+		x(t)=e^{At}x_0+\int_0^te^{A(t-s)}g_0+\int_0^te^{A(t-s)}(g(s)-g_0)ds \\
+	\end{align}
+	Now from here remember that we earlier showed that $e^{At}x_0\rightarrow 0$ and for $h(s)=g(s)-g_0\rightarrow 0$ we showed $\int_0^te^{A(t-s)}(g(s)-g_0)ds=\int_0^te^{A(t-s)}h(s)\rightarrow 0 $. Thus we only need to be concerned with the limiting behavior of the middle term
+
+	\begin{align}
+		\int_0^te^{A(t-s)}g_0
+	\end{align}
+	Since A is nonsingular (All of its eigenvalues are nonzero) we know that this integral (by standard matrix calculus) evaluates to:
+	\begin{align}
+		(e^{tA}-I)A^{-1}g_0 = e^{At}A^{-1}g_0-A^{-1}g_0
+	\end{align}
+	taking a look at the first term notice:
+	\begin{align}
+		|e^{At}A^{-1}|\leq |g_0|Ke^{-\sigma t}|A^{-1}|\rightarrow 0
+	\end{align}
+	This approaches zero because the norm of $A^{-1}$ is some bounded number (finite dimensional).
+
+	Thus the limiting behavior is that our solution approaches $-A^{-1}g_0$
+\end{exercise}
+
+% Exercise 3.4
+\begin{exercise}{3.4}
+	% NOTE: Remember The advanced gronwall
+
+	First we do this for some diagonalizable A all distinct eigenvalues:
+	\begin{align}
+		x(t)=Ve^{\Lambda}V^{-1}x_0 \\
+		=\sum_{i}e^{\lambda_i}v_iu_j^{T}x_0
+	\end{align}
+	Where $e^{\Lambda}$ is applied elementwise on the matrix and $u_j$ are the rows of $V^{-1}$. Note that each of these terms approach zero because they each have a negative exponential. The rate of convergence is just the eigenvalue with real part closest to zero (further to the right on the complex plane) because that will decay the slowest. This first one only relies on initial data for the coeffients of the exponentials so how high they start before they start decaying.
+
+	An even easier proof using a norm is taking:
+	\begin{align}
+		x(t)=e^{At}x_0
+	\end{align}
+	The solution and using the bound we proved earlier:
+	\begin{align}
+		|x(t)|\leq  Ke^{-\sigma t}|x_0|
+	\end{align}
+	Which obviously approaches zero since $\sigma,K>0$
+
+
+	We follow the hint writing the equation for some diagonalizable A:
+	\begin{align}
+		\dot x = Bx+(A-B)x                      \\
+		x(t)=e^{Bt}x_0+\int_0^te^{B(t-s)}(A-B)x \\
+	\end{align}
+	Taking absolute values:
+	\begin{align}
+		|x(t)|\leq |e^{Bt}||x_0|+ \int_0^t |e^{B(t-s)}||(A-B)||x| \\
+		\leq Ke^{-\sigma t}|x_0|+ Ke^{-\sigma t}\int_0^t e^{-\sigma (-s)}|(A-B)||x|
+	\end{align}
+	From here we can apply the advanced gronwalls inequality with $a=Ke^{-\sigma t},b=Ke^{-\sigma t}, c=e^{-\sigma (-s)}|A-B|$:
+	\begin{align}
+		\leq  Ke^{-\sigma t}|x_0|+ Ke^{-\sigma t}\int_0^t Ke^{\sigma s}|(A-B)|e^{-\sigma s}|x_0|e^{\int_s^tKe^{\sigma u}|(A-B)|e^{-\sigma u}du}ds \\
+		\leq  Ke^{-\sigma t}|x_0|+ Ke^{-\sigma t}\int_0^t K|(A-B)||x_0|e^{(t-s)K|(A-B)|}ds                                                        \\
+		\leq  Ke^{-\sigma t}|x_0|+ Ke^{-\sigma t} K|(A-B)||x_0|\int_0^t e^{(t-s)K|(A-B)|}ds                                                       \\
+		\leq  Ke^{-\sigma t}|x_0|+ Ke^{(K|A-B|-\sigma) t} K|(A-B)||x_0|\int_0^t e^{-sK|(A-B)|}ds                                                  \\
+		\leq  Ke^{-\sigma t}|x_0|+ Ke^{(K|A-B|-\sigma) t} K|(A-B)||x_0|(\frac{-1}{K|A-B|} e^{-sK|(A-B)|})_0^{t}                                   \\
+		\leq  Ke^{-\sigma t}|x_0|- Ke^{(K|A-B|-\sigma) t} |x_0|(e^{-sK|(A-B)|})_0^{t}                                                             \\
+		\leq  Ke^{-\sigma t}|x_0|- Ke^{(K|A-B|-\sigma) t} |x_0|(e^{-tK|(A-B)|}-1)                                                                 \\
+	\end{align}
+	Earlier we proved that the first term on the left appraoches zero so we really only need to worry about the term on the right.
+	\begin{align}
+		- Ke^{(K|A-B|-\sigma) t} |x_0|(e^{-tK|(A-B)|}-1)   \\
+		= Ke^{(K|A-B|-\sigma) t} |x_0|-Ke^{-\sigma t}|x_0| \\
+	\end{align}
+	Clearly the term on the right goes to zero (negative exponential) and we are just left with:
+	\begin{align}
+		Ke^{(K|A-B|-\sigma) t} |x_0|
+	\end{align}
+	From here we need this to decay. The trick is to choose $B$ so that $|B-A|<\frac{\epsilon}{K}$ Where $\epsilon < \sigma$ thus:
+	\begin{align}
+		=Ke^{(\epsilon-\sigma)t}|x_0|
+	\end{align}
+	Now because $\epsilon < \sigma$. the exponent is negative and this converges to zero. Thus everything works out and the solution converges to zero.
+
+	So it may start out higher if we have larger initial data, but everything will converge to zero regardless.
+
+	\textbf{Alternative proof}: In lecture we mentioned that it is true that if the spectrum is strictly negative then we have that:
+	\begin{align}
+		|e^{At}x_0|\leq Ke^{-\sigma t}||x_0|
+	\end{align}
+	Which goes to zero regardless of initial data. I can prove this for general matrices take:
+	\begin{align}
+		|e^{At}x_0|\leq |e^{At}||x_0| \\
+		\leq |V||V^{-1}||e^{Jt}||x_0|
+	\end{align}
+	Where J is the jordan blocks $A=VJV^{-1}$ from here remember that:
+	\begin{align}
+		=|V||V^{-1}||x_0||e^{\Lambda t}e^{Nt}|
+	\end{align}
+	For some nilpotent block n then:
+	\begin{align}
+		\leq |V||V^{-1}||x_0||e^{\Lambda t}||e^{Nt}|                             \\
+		\leq |V||V^{-1}||x_0||e^{\Lambda t}||\sum_{k=0}^{n-1} \frac{t^k}{k!}N^k| \\
+		\leq |V||V^{-1}||x_0||e^{\Lambda t}|\sum_{k=0}^{n-1} \frac{t^k}{k!}|N|^k \\
+	\end{align}
+	So now we have a polynomial on the right. Remember that any polynomial can be bounded by any arbitrary exponential (positive). namely for $\forall p>0\exists C_p, C_pe^{pt}>q(t)$ for all t and a given polynomial q. choose $p=-\text{re}(\lambda_j)/2$ where this is the largest real part of any eigenvalue (so p is in reality positive). then:
+	\begin{align}
+		\leq|V||V^{-1}||x_0||e^{\Lambda t}| Ce^{-\text{re}(\lambda_j)t/2}           \\
+		\leq|V||V^{-1}||x_0|e^{\text{re}(\lambda_j) t}Ce^{-\text{re}(\lambda_j)t/2} \\
+		\leq|V||V^{-1}||x_0|e^{\text{re}(\lambda_j/2) t} C                          \\
+	\end{align}
+	setting $K=|V||V^{-1}|C$ and $\sigma = -\text{re}(\lambda_j)/2$ we get:
+	\begin{align}
+		=Ke^{-\sigma t}
+	\end{align}
+	Note that the norm of that diagonal matrix is the eigenvalue with the largest real part which i denote $\lambda_j$. So thus it is proven.
+\end{exercise}
+\end{document}

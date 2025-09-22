@@ -1,0 +1,138 @@
+\documentclass[12pt]{article}
+% This package simply sets the margins to be 1 inch.
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{marvosym}% This adds the contradiction command (\Lightning)
+% These packages include nice commands from AMS-LaTeX
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Define an environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+
+% define shortcut commands for commonly used symbols
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\nR}{\mathcal{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\xk}{x_k}
+\newcommand{\yk}{y_k}
+\newtheorem*{remark}{Remark}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\begin{document}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Numerical Methods for Linear Algebra 1234
+\end{center}
+
+\section{Numerical Stability}
+Historically, this has been a very difficult topic for me to understand. Here is how I will put it.
+
+In floating-point arithmetic, operations such as addition, multiplication, rounding, and exponentiation are not exact, and are often modeled as
+\[
+	\text{fl}(x) = x(1 + \epsilon),\text{ rounding error}
+\]
+where \(\epsilon\) is a small error term (typically on the order of machine epsilon). For example, the floating-point evaluation of \(x + 1\) might be modeled as
+\begin{align*}
+	x \oplus 1 = (x + 1)(1 + \epsilon) \\
+	\text{fl}(x)\otimes 1 = (x(1+\epsilon_1)+1)(1+\epsilon_2)
+\end{align*}
+
+When analyzing floating-point computations, we often use \(\tilde{f}(x)\) to denote the computed version of a function \(f(x)\). However, this can mean one of two things, depending on the context:
+
+\begin{enumerate}
+	\item \textbf{Full error tracking}: We include rounding errors from both the inputs and each intermediate operation.
+	      For instance, for \(f(x) = x^2\), we might write
+	      \[
+		      \tilde{f}(x) = \left(x(1 + \epsilon_1)\right)^2(1 + \epsilon_2).
+	      \]
+
+	\item \textbf{Operation-only error tracking}: We assume the input is exact and only account for errors from operations.
+	      In this case, the same function might be modeled as
+	      \[
+		      \tilde{f}(x) = (x^2)(1 + \epsilon).
+	      \]
+\end{enumerate}
+align
+For simple functions, it's often feasible to track all rounding errors explicitly. But in more complex expressions or algorithms, we typically focus on operation-induced errors and omit the initial input error for simplicity.
+
+We also often denote $\tilde x = x+\delta x$
+
+There are two things that we are concerned about with this topic: stability and backwards stability.
+
+A function $f$ is backwards stable if:
+\begin{align}
+	\tilde f(x) = f(\tilde x)=f(x+\delta x) \\
+	\text{for some $\delta x$ with}:        \\
+	\frac{\norm{\tilde x-x}}{\norm{x}}=\frac{\norm {\delta x}}{\norm {x}}=O(\epsilon)
+\end{align}
+Ofsten the steps to proving this was to take $\tilde f(x)$ and try to find some $\delta x$ such that $\tilde f(x)=f(x+\delta x)$. This is done by expanding all of the operations using operation-only error tracking (So it should be in terms of $\epsilon_\xi$). One then takes that computed $\delta x$ and plugs it into the second condition to show it is $O(\epsilon)$.
+
+A function $f$ is stable if we relax the first condition:
+\begin{align}
+	\frac{\norm{\tilde f(x)-f(\tilde x)}}{\norm{f(\tilde x)}}=O(\epsilon) \\
+	\text{for some $\delta x$ with}:                                      \\
+	\frac{\norm{\tilde x-x}}{\norm{x}}=\frac{\norm {\delta x}}{\norm {x}}=O(\epsilon)
+\end{align}
+\subsection{Stability of unitary matrix multiplication}
+A non standard way to prove backwards stability in this case is to notice that if an algorithm is backwards stable:
+\begin{align}
+	\tilde{QA}=QA+Q\Delta A \\
+	\norm{\delta A}=\norm{Q\Delta A}=\norm{\tilde{QA}-QA}
+\end{align}
+Where we used both linearity and unitarity. Typically when we are given a matrix, we show component wise backwards stability. This is much stronger than norm stability because the sum of all of the entries in the matrix is certainly greater than the infinity or one norm, the statement then follows from norm equivalence.
+
+From here I will note without proof that for $f(x)=q^*x$ we have $\tilde f(x)=q^*x+m q^*x O(\epsilon)$. We then note that the $i,j$th entry of $\tilde{QA}-QA$ is then:
+\begin{align}
+	mQ_{i}^*A_{:,j}O(\epsilon)
+\end{align}
+since Q is unitary we know its entries are all less than $1$ so:
+\begin{align}
+	\leq mO(\epsilon)\sum_{k=0}^mA_{k,j} \\
+	\leq m\norm{A}O(\epsilon)
+\end{align}
+We can bound the norm of the whole matrix by adding together all of the entries (corresponding to multiplying the above by $m^2$). Thus we get backwards stability:
+\begin{align}
+	\frac{\norm{\delta A}}{\norm{A}}\leq \frac{m^3\norm{A}O(\epsilon)}{\norm{A}}=m^3O(\epsilon)=O(\epsilon)
+\end{align}
+This tells us that computing the householder $QR$ decomposition is numerically stable.
+
+\subsection{Stability of QR solver}
+Consider the problem $Ax=b$ and we want to solve for x. To do this we can apply the QR decomposition $QRx=b$ apply $Q^*$ on both sides $Rx=Q^*b$ and then use backsubstitution to solve for things.
+Note that if we compute the QR decomposition using housholder transformations, that amounts to multiplication by a unitary matrix at each step. Thus obtaining the QR decomposition and solving for $Q^*b$ is actually backwards stable by what we just proved. The book also proves that backsubstitution is stable (I will not go into details)
+
+To prove that the algorithm above is backwards stable consider:
+\begin{align}
+	\tilde f(A)=f(\tilde A)                                                         \\
+	(\tilde Q+\delta Q)(\tilde R+\delta R)x=(A+\Delta A)\tilde x                    \\
+	(\tilde Q\tilde R +(\delta Q)\tilde R+\tilde Q(\delta R)+(\delta Q)(\delta R))x \\
+	=(A+\delta A+(\delta Q)\tilde R+\tilde Q(\delta R)+(\delta Q)(\delta R))x
+\end{align}
+So those four latter terms are $\Delta A$ and we need to show that $\frac{\norm{\Delta A}}{\norm A}=O(\epsilon)$
+\end{document}

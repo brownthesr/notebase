@@ -1,0 +1,266 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 1
+\begin{exercise}{1}
+
+	So to prove this take the schur decomposition and assume that A is normal:
+	\begin{align}
+		A=UTU^* \\
+	\end{align}
+	Then:
+	\begin{align}
+		A^*A=AA^*                 \\
+		UT^*U^*UTU^*=UTU^*UT^*U^* \\
+		UT^*TU^*=UTT^*U^*         \\
+		T^*T=TT^*
+	\end{align}
+	So T must be normal. We now prove that any normal upper triangular matrix must also be diagonal...
+	take $e_1$:
+	\begin{align}
+		T^*Te_1                                                   \\
+		=T^*[T_{11},0,\dots].T\text{ since T is upper trinagular} \\
+		=[|T_{11}|^2,0,\dots].T
+	\end{align}
+	but in addition:
+	\begin{align}
+		TT^*e_1                                           \\
+		=T[ \overline{T_{11}}, \overline{T_{12}},\dots].T \\
+		=[\sum_j |T_{1j}|^2,\dots].T
+	\end{align}
+	Note I left off the last n-1 entries of the vector because we will not be using them.
+
+	Now note that since these two must be equal we know that $\sum |T_{1j}|^2=|T_{11}|^2$. Thus $T_{1j}=0$ for $j\neq 1$. From this we immidiately get equality above.
+
+	Now that we have established that as a base case we prove assume that $T$ is normal and diagonal up to k and prove it is diagonal on $k+1$ or that $T_{k+1,j}=0$ for $j>k+1$ to do this take the vector $e_{k+1}$ then:
+	\begin{align}
+		T^*Te_{k+1}                                                                                         \\
+		=T^*[0,\dots,T_{k+1,k+1},0,\dots].T \text{ because of inductive hypothesis all rows above are zero} \\
+		=[0,\dots, |T_{k+1,k+1}|^2,0,\dots].T
+	\end{align}
+	Furthermore
+	\begin{align}
+		TT^*e_{k+1}                                                        \\
+		=T[0,\dots \overline{T_{k+1,k+1}}, \overline{T_{k+1,k+2}},\dots].T \\
+		=[0,\dots, \sum_{j=k+1}^n|T_{k+1,j}|^2,\dots].T
+	\end{align}
+	(Once again we ignore the last $n-k-1$ entries because we do not use them )
+
+	From here we then know that $\sum_{j=k+1}^n|T_{k+1,j}|^2=|T_{k+1,k+1}|^2$. So that must mean that $T_{k+1,j}=0$ for $j>k+1$.
+
+	Carry out this induction to n and we are left with the fact that $T$ is Diagonal.
+
+	From this we can see that $A=UTU^*$ where T is diagonal so A is unitarily diagonalizable.
+
+	In the opposite direction assume that A is unitarily diagonalizable then:
+	\begin{align}
+		AA^*=UDU^*UD^*U \\
+		=UDD^*U^*
+	\end{align}
+	Now remember that all diagonal matrices commute so:
+	\begin{align}
+		=UD^*DU^*     \\
+		=UD^*U^*UDU^* \\
+		=A^*A
+	\end{align}
+	So A is normal. and it is proven
+
+\end{exercise}
+
+% Exercise 2
+\begin{exercise}{2}
+	Assume that A is hermitian and positive semi definite. We know that all of the eigenvalues are nonnegative because of semidefiniteness $x^*Ax\geq0\implies W(A)\geq0$. Since it is also hermitian all of these valeus are also strictly real
+
+	Furthermore take its eigenvalue decomposition (since it is hermitian this exists):
+	\begin{align}
+		A=V\Lambda V^*
+	\end{align}
+
+	Then note that:
+	\begin{align}
+		A^*A=V\Lambda^* V^*V\Lambda V^* \\
+		=V\Lambda^2 V^*
+	\end{align}
+	from here note that this is the eigenvalue decomposition of $A^*A$ and $\Lambda*=\Lambda$ because all of the eigenvalues are real. Then note that the singular values are:
+	\begin{align}
+		\sigma_i= \sqrt{\lambda_i^2}=\lambda_i
+	\end{align}
+	So since all of the eigenvalues are real and positive this exists and all of the singualr values equal the eigenvalues (at least for the nonzero eigenvalues.)
+
+	If the matrix is normal then we get that:
+	\begin{align}
+		A^*A=V|\Lambda|^2V^*
+	\end{align}
+	so $\sigma_i = \sqrt{|\lambda_i|^2}=|\lambda_i|$
+
+	So the singular values are actually the magnitudes of the eigenvalues
+\end{exercise}
+
+% Exercise 3
+\begin{exercise}{3}
+
+	To do this take the frobenius norm of a matrix:
+	\begin{align}
+		\norm{A}_{fr}^2=\tr(AA^*) \\
+		=\tr(U\Sigma V^*V\Sigma^* U^*)
+	\end{align}
+	Because every matrix has an singular value decomposition. Note that $\Sigma^*=\Sigma$ since they are all real and positive. Also note that $V^*V=I$ so:
+	\begin{align}
+		=\tr(U\Sigma^2U^*)                                 \\
+		=\tr(U^*U\Sigma^2)\text{ cyclic property of trace} \\
+		=\tr(\Sigma^2)                                     \\
+		=\sum\limits_{k=1}^{r}\left(\sigma^2\right)        \\
+		=\norm{\sigma}_2^2
+	\end{align}
+\end{exercise}
+
+% Exercise 4
+\begin{exercise}{4}
+	To do this take:
+	\begin{align}
+		\norm{A-B}_2 \\
+		\geq \norm{(A-B)v}
+	\end{align}
+	For some particular v. Assume rank of B is strictly less than A or else we just choose $B=A$ and the proof is trivial. Since rank of B is strictly less than A then the space spanned by the $k+1$ right singular vectors of A must include a vector in the  null space of B. Take this right singular vector $v_j$ then:
+	\begin{align}
+		=\norm{(A-B)v_j}=\norm{Av_j}              \\
+		=\norm{\sum_{i=1}^{r}\sigma_iu_iv_i^*v_j} \\
+		=\norm{\sigma_ju_j}=\sigma_j\geq \sigma_{k+1}
+	\end{align}
+	So we know that the norm of $A-B$ is bounded below by the $k+1$ singular value of A. if $A=\sum_{i=1}^r\sigma_iu_iv_i^*$ then set $B=\sum_{i=1}^k\sigma_iu_iv_i^*$
+	and we get:
+	\begin{align}
+		\norm{A-B}=                                                                                                              \\
+		=\norm{\sum\limits_{j=1}^{k}\left(\sigma_j-\sigma_j\right)u_jv_j^*+\sum\limits_{j=k+1}^{r}\left(\sigma_j\right)u_jv_j^*} \\
+		=\norm{\sum\limits_{j=k+1}^{r}\left(\sigma_j\right)u_jv_j^*}
+	\end{align}
+	And remember that the two norm of a matrix is the largest singular value (I think we proved this but if not note that since the two norm is invariant under unitary transformation $\norm{A}=\norm{\Sigma}$ and the norm of that diagonal (even if rectangular) matrix is just the largest entry on the diagonal). so
+
+	\begin{align}
+		=\sigma_{k+1}
+	\end{align}
+	So the lower bound that we set up is achieved specifically when $B$ the rank k approximation of A. So that is the answer.
+\end{exercise}
+
+% Exercise 5
+\begin{exercise}{5}
+	To prove this take some random vector in V and take $P$ to be the orthogonal projector onto V then:
+	\begin{align}
+		\norm{x-v}^2=\norm{x-Px+Px-v}^2               \\
+		=\norm{(I-P)x+Px-Pv}^2\text{ since v is in V} \\
+		=\norm{(I-P)x+P(x-v)}^2
+	\end{align}
+	Remember now that $I-P$ projects onto a space orthogonal to $P$ so the two things in our norm are orthogonal. We can then apply pythagoras:
+	\begin{align}
+		=\norm{(I-P)x}^2+\norm{Px-Pv}^2
+		=\norm{x-Px}^2+\norm{Px-v}^2\geq \norm{x-Px}^2
+	\end{align}
+	so as a result
+	\begin{align}
+		\norm{x-v}\geq \norm{x-Px}
+	\end{align}
+	for any arbitrary $v\in V$. We now show that this minimum can be attain. Well trivially by choosing $v=Px$ since $Px\in V$. \qed
+\end{exercise}
+
+% Exercise 6
+\begin{exercise}{6}
+	a) to prove this part remember that we can construct projections like:
+	\begin{align}
+		P_{U_k}=\sum\limits_{j=1}^{k}\left(u_ju_j^*\right)
+	\end{align}
+	So :
+	\begin{align}
+		P_{U_k}A=\sum\limits_{l=1}^{k}\left(u_lu_l^*\right)\sum\limits_{k=1}^{n}\left(\sigma_k u_kv_k^*\right) \\
+		=\sum\limits_{j=1}^{k}\sum\limits_{l=1}^{n}\left(u_ju_j^*\right)\left(\sigma_lu_lv_l^*\right)          \\
+		=\sum\limits_{j=1}^{k}\sigma_ju_ju_j^*u_jv_j^*                                                         \\
+		=\sum\limits_{j=1}^{k}\sigma_ju_jv_j^*                                                                 \\
+	\end{align}
+	And it is proven
+
+	b) To prove this part we just take remember that the B that minimizes:
+	\begin{align}
+		||A-B||_F^2
+	\end{align}
+	Is literally just  (by smidth theorem) $\sum_{j=1}^k\sigma_ju_jv_j^*=P_{U_k}A$ by part A. thus if U were any other projection it would not be equal to B. so this is proven by the smidth theorem.
+
+	c) To prove this last part remember that one form of the forbenius norm is $||D||_F^2=\sum_{i}||D_i||_2^2$ where $D_i$ are the collumns of D. now take:
+	\begin{align}
+		P_VA=[P_Va_1,\dots, P_Va_n] \\
+		||P_VA||_F^2=\sum_{j}||P_Va_j||_2^2=\text{var}_{V}(B)
+	\end{align}
+	So we just need to maximize this projection. Intuitively choosing $V=U_k$ should maximize it because that is the thing that mimizeds the norm thing. But how to show it
+
+	Here can use a cheap trick note:
+	\begin{align}
+		\text{var}_{V}(B)=||P_VA||_F^2 \\
+		||A||_F^2=||(I-P_V)A+P_VA||_F^2
+	\end{align}
+	Note that if we convert this into the $\sum ||(I-P_V)a_j+P_Va_j||_2^2$ we can apply pythagoras to each element in turn and then convert back to get:
+	\begin{align}
+		||A||_F^2=||(I-P_V)A+P_VA||_F^2 \\
+		=||(I-P_V)A||_F^2+||P_VA||_F^2  \\
+		||A||_F^2-||A-P_VA||_F^2=||P_VA||_F^2
+	\end{align}
+
+	So if we maximize the left hand side it is the same as maximizing right hand side over V. Maximizing the left hand side is thus equivalent to minimizing:
+	\begin{align}
+		||A-P_VA||_F^2
+	\end{align}
+	since there was a negative. And the thing that minimizes this is $P_{U_k}$ by the above proof (part b). So the maximal subspace is the space $U_k$
+\end{exercise}
+\end{document}

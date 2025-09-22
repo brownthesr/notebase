@@ -1,0 +1,296 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 2.3.8
+\begin{exercise}{2.3.8}
+
+	Take some arbitrary cauchy sequence. Note that you can write it via telescoping as:
+	\begin{align}
+		x_n \\
+		=x_0+\sum_{j=0}^{n-1}(x_{j+1}-x_j)
+	\end{align}
+	We need to show that for a cauchy sequence this is absolutely convergent, then that would mean that it converges and as a result $x_n$ converges so:
+
+	To do this choose $N$ large enough so that for $m,l>N$ we have that $||x_m-x_l||<\epsilon$ for some epsilon. We can do this because the sequence is cauchy. Then for $n>N$:
+	\begin{align}
+		\norm{x_n}=\norm{x_0+\sum_{j=0}^{n-1}(x_{j+1}-x_j)}                                                          \\
+		\leq \norm{x_0}+\norm{\sum_{j=0}^{N}(x_{j+1}-x_j)}+\norm{ \sum\limits_{j=N+1}^{n-1}\left(x_{j+1}-x_j\right)} \\
+		\leq \norm{x_0}+\norm{x_N-x_0}+\norm{x_{n}-x_{N+1}}                                                          \\
+		\leq  \norm{x_0}+\norm{x_N-x_0}+\epsilon
+	\end{align}
+	Now choose $\epsilon < 1$ from here:
+	\begin{align}
+		\leq \norm{x_0}+\norm{x_n-x_0}+1<\infty
+	\end{align}
+	This is less than infinity because the other two norms are positive. so This series converges absolutely! Namely the series $x_0+(x_1-x_0)+(x_2-x_1)+\dots + (x_n-x_{n-1})=x_n$ converges absolutely. Because it converges absolutely we know that $x_0+(x_1-x_0)+(x_2-x_1)+\dots + (x_n-x_{n-1})=x_n$ converges. So
+	\begin{align}
+		x_n
+	\end{align}
+	must also converge. And since $x_n$ was cauchy then the space is complete since every cauchy sequence converges.
+\end{exercise}
+
+% Exercise 2.3.10
+\begin{exercise}{2.3.10}
+	To prove this assume that a normed space has a schauder basis. that means that for every $x\in X$ we have a unique sequence of scalars:
+	\begin{align}
+		||x-(\alpha_1e_1+\dots+\alpha_ne_n)||\rightarrow 0
+	\end{align}
+	or that the partial sums converge to x. Define the space $P$ to be the set of all finite series in the schauder basis $\sum_{k=1}^n\beta_ke_k$ (n is not fixed, $\beta$ is rational).
+
+	We show that any point x is also a limit point of things in P. Take $x\in X$
+	\begin{align}
+		||x-\sum_{k=1}^n\beta_ke_k||                                                          \\
+		\leq ||x-\sum_{k=1}^n\alpha_ke_k||+||\sum_{k=1}^n\alpha_ke_k-\sum_{k=1}^n\beta_ke_k|| \\
+		\leq ||x-\sum_{k=1}^n\alpha_ke_k||+||\sum_{k=1}^n(\alpha_k-\beta_k)e_k||              \\
+		\leq ||x-\sum_{k=1}^n\alpha_ke_k||+\sum_{k=1}^n|\alpha_k-\beta_k|||e_k||              \\
+	\end{align}
+	From here note that we can always choose $n$ large enough so that the first term is less than $\epsilon/2$ this just follows from the definition of the shauder basis.
+
+	Given this n we can choose $\beta_k$ close enough to $\alpha_k$ (by density of the rationals) to be $|\alpha_k-\beta_k|\leq \frac{\epsilon}{2n||e_k||}$ thus:
+	\begin{align}
+		\leq \epsilon/2 + \sum\limits_{k=1}^{n}\left(\epsilon/2n\right)
+		= \epsilon/2 + \epsilon/2 \\
+		=\epsilon
+	\end{align}
+
+	So we can get arbitrarily close to anything in x with a thing from P. Now note that P is countable. This follows from the fact that $Q$ is countable and we are only taking finite sums over the countable shauder basis.
+
+\end{exercise}
+
+% Exercise 2.7.6
+\begin{exercise}{2.7.6}
+
+	To do this note first that by problem 5 the operator defined by $y=(\eta_j)$ where $y=Tx,\eta_j=\xi_j/j,x=\xi_j$ is linear and bounded in other words if:
+	\begin{align}
+		x=(x_1,\dots)\in l^{\infty} \\
+		Tx=(\frac{x_1}{1},\frac{x_2}{2},\dots)
+	\end{align}
+	then this operator is linear and bounded.
+
+	To do this note that if $y\in R(T)$ then there is an $x$ such that $y_j=\frac{x_j}{j}$ furthermore we know that $x_j$ is in $l^\infty$ so $\max_j x_j=\max_jy_j j<\infty$
+
+	So for $y$ to be in the range it must be bounded even when multiplied by j.
+
+	Take the sequence $y=\frac{1}{\sqrt{j}}$ clearly this is in the closure of $R(T)$ because we can take $x=(\sqrt{1},\sqrt{2},\dots,\sqrt{n},0,\dots)$ and have that:
+	\begin{align}
+		||x-y||=\max_j|(\frac{1}{\sqrt 1}-\frac{1}{\sqrt{1}},\frac{1}{\sqrt{2}}-\frac{1}{\sqrt{2}},\dots,\frac{1}{\sqrt{n}}-\frac{1}{\sqrt{n}},-\frac{1}{\sqrt{n+1}},\dots)| \\
+		=\max_j|(0,0,\dots,0,-\frac{1}{\sqrt{n+1}},\dots)|                                                                                                                   \\
+		=\frac{1}{\sqrt{n+1}}
+	\end{align}
+	So we can get arbitrarily close to this vector. However we know that the vector x $x=(1,\sqrt{2},\sqrt{3},\sqrt{4},\dots)$ that would achieve this is unbounded. so $x\notin l^{\infty}$. As a result the range of T is not closed
+\end{exercise}
+
+% Exercise 2.7.8
+\begin{exercise}{2.7.8}
+	To prove this we do it by contradiction. Assume there was a bound so that $||Tx||\leq M||x||$ for all x. then remember that $T^{-1}:R(T)\rightarrow D(T)$ is defined by :
+	\begin{align}
+		T^{-1}y=(y_1*1,y_2*2,\dots,y_j*j,\dots)
+	\end{align}
+	Choose $K>M, K\in \Z$. from here take the vector $y=(1,\dots,1,0,\dots)$ where the ones take up $K$ positions. Note that $y\in R(T)$ just take $x=(1,2,\dots, K,0,\dots)$ clearly $x\in l^\infty$ so that $Tx=y$.
+
+	from here note that $T^{-1}y=x$ from what we just showed and that $\max_j |x_j|=K$ however that means that:
+	\begin{align}
+		||T^{-1}y||=||x||=\max_j|x_j|=K
+	\end{align}
+	Furthermore note that $y$ is unit norm so:
+	\begin{align}
+		||T^{-1}y||=||x||=K=K||y||
+	\end{align}
+	but this is a contradiction because $K>M$ and we assumed that M was the bound. Thus $T^{-1}$ is unbounded.
+\end{exercise}
+
+
+% Exercise 2.9.10
+\begin{exercise}{2.9.10}
+	So the idea for this problem is that we actually need to create a basis. Choose the basis for x so that we have a basis $\{z_1,\dots z_k\}$ for Z and a separate basis for $X-Z$ $b_{k+1},\dots b_n$ (Note that both of these are nonepty by the fact that this is a proper subspace). Choose $b_{k+1}=x_0$ (we are allowed to do this since we can just pull other linearly independent vectors in). First notice that this is a bsis for the whole space because any thing in X is either in Z or not in Z ($X=(X\cap Z^c)\cup (X\cap Z)$). From here define the linear functional by:
+	\begin{align}
+		f(z_j)=0     \\
+		f(b_{k+1})=1 \\
+		f(b_{j})=1
+	\end{align}
+	From this we know that linear functionals are uniquely defined by their action on the basis vectors so that:
+	\begin{align}
+		x=\xi_1z_1+\dots+\xi_kz_k+\xi_{k+1}b_{k+1}+\dots+\xi_nb_n \\
+		f(x)=\sum_{j=1}^k\xi_jf(z_j)+\sum_{j=k+1}^n\xi_jf(b_j)    \\
+		=\sum_{j=k+1}^n\xi_jf(b_j)
+	\end{align}
+	So if $x\in Z$ then clearly $\xi_k$ is only nonzero for the first k values (since those are a basis). In other words the last $n-(k+1)$ elements are zero corresponding to the basis for $X-Z$. thus:
+	\begin{align}
+		f(x)=\sum_{j=k+1}^n\xi_jf(z_j) \\
+		=0 \text{ since $\xi_j=0$ for $j\geq k+1$ }
+	\end{align}
+	However if $x=x_0$ then $x=1*b_{k+1}=1*x_0=x_0$ and $\xi_{k+1}=1$ but zero everywhere else so
+	\begin{align}
+		f(x)=\sum_{j=k+1}^n\xi_jf(b_j)=\xi_{k+1}f(b_{k+1})=f(b_{k+1})=f(x_0)=1
+	\end{align}
+	Thus it is proven.
+
+\end{exercise}
+
+% Exercise A
+\begin{exercise}{A}
+	take :
+	\begin{align}
+		|f(x)|\leq ||f||||x||
+	\end{align}
+	now note that $0\in N(f), f(0)=0*f(0)=0$ so that $d(x,Y)\leq d(x,\{0\})=||x||$ thus:
+	\begin{align}
+		\leq ||f||d(x,Y)
+	\end{align}
+
+	For this one note that $||f||=\sup_{||x||=1}|f(x)|$. Or that it is the supremum of all vectors of unit length. Since it is a supremum we can get arbitrarily close to it with some $u$ this means that we can get within $\epsilon ||f||$ distance or $f(u)\geq ||f||-\epsilon ||f||=(1-\epsilon)||f||$ where $u$ is unit length by definition of norm.
+
+	now note that
+	\begin{align}
+		y=x-\frac{f(x)}{f(u)}u\in Y \text{ because:} \\
+		f(y)=f(x)-\frac{f(x)}{f(u)}f(u)=0
+	\end{align}
+	so
+	\begin{align}
+		d(x,Y)\leq ||x-y||=||x-(x-\frac{f(x)}{f(u)}u)|| \\
+		=||\frac{f(x)}{f(u)}u||                         \\
+		=\frac{|f(x)|}{|f(u)|}||u||                     \\
+		=\frac{|f(x)|}{|f(u)|}
+		\leq \frac{|f(x)|}{(1-\epsilon)||f||}
+	\end{align}
+	So in total:
+	\begin{align}
+		(1-\epsilon)||f|| d(x,Y)\leq |f(x)|
+	\end{align}
+	Taking the limit as $\epsilon \rightarrow 1$ we get:
+	\begin{align}
+		||f||d(x,Y)\leq |f(x)|
+	\end{align}
+	So thus  $||f||d(x,Y)\leq|f(x)|$
+
+\end{exercise}
+% Exercise B
+\begin{exercise}{B} (HELP, B seems to easy)
+
+	To do this take:
+	\begin{align}
+		||f(x)||=||\int_0^1x(t)z(t)dt||   \\
+		\leq \int_0^1|x(t)||z(t)|dt       \\
+		\leq \max |x(t)|\int_0^1 |z(t)|dt \\
+		=\norm{x}\int_0^1|z(t)|dt
+	\end{align}
+	So we know that the norm is bounded by this value.  Take
+	\begin{align}
+		x=% 2 cases 
+		\begin{cases}
+			t/a \text{ if } t<a \\
+			1 \text{ if } t>a
+		\end{cases}
+	\end{align}
+	This is a continuous function and satisfies $x(0)=0,\norm{x}=1$ for $a\in (0,1]$. and note that:
+	\begin{align}
+		|f(x)|\leq\int_0^at/a|z(t)|dt+\int_a^1|z(t)|dt \\
+		< \int_0^a 1*|z(t)|dt+\int_a^1|z(t)|dt         \\
+		=\int_0^1|z(t)|dt
+	\end{align}
+	So we have a strict inequality. however we can choose a arbitrarily small so that the first integral can be made smaller that $\epsilon$. In that way we can get arbitrarily choice using a unit norm x to $\int_0^1|z(t)|dt$ The details of this are as follows:
+	\begin{align}
+		\int_0^1z(t)dt-\int_0^at/az(t)dt-\int_a^1z(t)dt \\
+		\int_0^az(t)- \frac{t}{a}z(t)dt                 \\
+		\int_0^a(1- \frac{t}{a})z(t)dt                  \\
+		\leq \int_0^a z(t)dt
+	\end{align}
+	Note that since z is bounded (by continuity on compact subset):
+	\begin{align}
+		||\int_0^1z(t)dt-\int_0^at/az(t)dt-\int_a^1z(t)dt ||\leq \int_0^a|z(t)|dt \\
+		\leq aM
+	\end{align}
+	So we can choose a to make to make this quantity as small as we want. so we know then that the supremum of all such $x$ over a is in fact $\int_0^1 |z(t)|dt$ but since $z(t)>0$ we always have that little term in fron that makes it so that no x actually attains it (that is unit norm).
+
+	b) To show this, first we know it is bounded by the above theorem. Secondly we know it is linear because:
+	\begin{align}
+		f(ax+by)=\int_0^1(ax(t)+by(t))z(t)dt \\
+		=a\int_0^1 x(t)z(t)dt+b\int_0^1 y(t)z(t)dt
+	\end{align}
+
+	So then we know by corollary 2,7-10 of the book that if T is a bounded linear operator then the null space is closed. So this is a bounded linear operator, a special case as a functional. So its null space is closed
+
+	Its a proper subspace because since $z(t)>0$ if we choose
+	\begin{align}
+		x=% 2 cases 
+		\begin{cases}
+			t/a \text{ if } t<a \\
+			1 \text{ if } t>a
+		\end{cases}
+	\end{align}
+	then as before we will have
+
+	\begin{align}
+		f(x)=\int_0^at/az(t)dt+\int_a^1z(t)dt \\
+		>0
+	\end{align}
+	Since all of the quanities involved are strictly positive. So we know that there are things in X that are not in the null space. So it is a proper subspace.
+
+	c) To show this take f for part A to be our example here then:
+	\begin{align}
+		\int_0^1|z(t)|dtd(x,Y)=|\int_0^1x(t)z(t)dt|          \\
+		d(x,Y)=\frac{|\int_0^1x(t)z(t)dt|}{\int_0^1|z(t)|dt} \\
+		d(x,Y)=\frac{|f(x)|}{||f||}
+	\end{align}
+	However we know that for any $x\in X$ (if $||x||=1$)we always have $|f(x)|<||f||$ by part a. So thus we have that:
+	\begin{align}
+		d(x,Y)<1
+	\end{align}
+	So this quantity can not be greater than or equal to one.
+\end{exercise}
+\end{document}

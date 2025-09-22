@@ -1,0 +1,168 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\mpa}{M^\perp}
+\newcommand{\mpp}{(M^\perp)^\perp}
+\newcommand{\mppp}{((M^\perp)^\perp)^\perp}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 2.10.10
+\begin{exercise}{2.10.10}
+	We show there is some operator that is not bounded. Take some arbitrary hamel basis of $X$. Note that in general this basis will be infinitely dimensional, but we can take a subset of this basis that is countable.
+
+	Given this subset $e_k$. define $Te_k=ke_k$. We show that this operator is unbounded. take $||Te_k||=|k|||e_k||$ clearly this bound can grow to be as large as we want so this operator is unbounded. It doesn't matter what we define the operator on the rest of the hamel basis to be (it could even be zero), since it is unbounded on this subset the linear operator is unbounded. As a result there always exists an unbounded linear operator.
+\end{exercise}
+
+% Exercise 3.2.4
+\begin{exercise}{3.2.4}
+	To show this recall that the inner product is continuous namely if we have two convergent sequences $x_n\rightarrow x,y_n\rightarrow y$ then $\langle x_n, y_n\rangle \rightarrow \langle x, y\rangle $
+
+	Take $x_n$ as given in the problem and define $y_n=(y,y,y,\dots)$. From here note that $\langle x_n,y_n\rangle = \langle x_n, y\rangle \rightarrow \langle x, y\rangle $. However
+	\begin{align}
+		\langle x_n, y\rangle =0
+	\end{align}
+	So since it is a constant sequence of zero it must approach $0$ thus by continuity $\langle x_n, y\rangle \rightarrow 0=\langle x, y\rangle $
+\end{exercise}
+
+% Exercise 3.2.8
+\begin{exercise}{3.2.8}
+	assume that $x\perp y$ so $\langle x, y\rangle =0$ then take:
+	\begin{align}
+		||x+\alpha y||^2=||x||^2- \overline{\alpha} \langle x, y\rangle -\alpha (\langle y, x\rangle - \overline{\alpha}\langle y, y\rangle ) \\
+		=||x||^2+|\alpha|^2 ||y||^2\geq ||x||^2                                                                                               \\
+		\implies                                                                                                                              \\
+		||x+\alpha y||^2\geq ||x||^2                                                                                                          \\
+		||x+\alpha y||\geq ||x||                                                                                                              \\
+	\end{align}
+	For the other direction assume that $||x+\alpha y||\geq ||x||$ then for this we take:
+	\begin{align}
+		||x||^2\leq ||x+\alpha y||^2=||x||^2- \overline{\alpha} \langle x, y\rangle -\alpha (\langle y, x\rangle - \overline{\alpha}\langle y, y\rangle ) \\
+	\end{align}
+	choosing $\overline{\alpha}=\frac{\langle y, x\rangle }{\langle y, y\rangle }$ then:
+	\begin{align}
+		= ||x||^2-\frac{|\langle x, y\rangle |^2}{\langle y, y\rangle }
+	\end{align}
+	so :
+	\begin{align}
+		0\leq -\frac{|\langle x, y\rangle |^2}{\langle y, y\rangle } \\
+		0\geq \frac{|\langle x, y\rangle |^2}{\langle y, y\rangle }  \\
+		0\geq (|\langle x, y\rangle |^2)                             \\
+		0\geq (|\langle x, y\rangle |^2)                             \\
+		0\geq |\langle x, y\rangle |
+	\end{align}
+	So we must have that $\langle x,y\rangle = 0$
+\end{exercise}
+
+% Exercise 3.3.10
+\begin{exercise}{3.3.10}
+
+	first note that if $A\subset B$ then $B^\perp\subset A\perp$. To prove this assume that $b\in B\perp$ so $b\perp d\in B$ in particular $b\perp a\in A$ so $b\in A^{\perp}$. From here note that if $M\subset Y$ then $Y^\perp \subset M^\perp$. But now we can do this agian to obtain that $(M^{\perp})^\perp\subset (Y^{\perp})^\perp$. However since Y is closed we know that $Y=(Y^\perp)^\perp$ so we have that:
+	\begin{align}
+		\mpp\subset Y
+	\end{align}
+	% NOTE: Taking the perp of a subset inclusion reverses the subset inclusion
+
+\end{exercise}
+
+% Exercise 3.4.6
+\begin{exercise}{3.4.6}
+	To do this take:
+	\begin{align}
+		||x-y||^2
+	\end{align}
+	Note that this has the same minimizer as $||x-y||$ then:
+	\begin{align}
+		=||x||^2-\langle x, y\rangle -\langle y, x\rangle +||y||^2
+	\end{align}
+	note that in minimizing this we only need to minimize the $\beta$ so we can actually ignore the first term x since it does not depend on beta:
+	\begin{align}
+		-\langle x,y\rangle -\langle y,x\rangle +||y||^2                                                      \\
+		=-\langle x,y\rangle -\langle y,x\rangle + \langle \sum_k\beta_k e_k,\sum_k \beta_k e_k\rangle        \\
+		=-\langle x,y\rangle -\langle y,x\rangle + \sum_k\langle \beta_k , \beta_k \rangle                    \\
+		=-\langle x,y\rangle -\langle y,x\rangle + \sum_k|\beta_k|^2                                          \\
+		=-\langle x,\sum_k\beta_ke_k\rangle -\langle \sum_k\beta_k e_k,x\rangle +\sum_k|\beta_k|^2            \\
+		=- \sum_k\overline{\beta_k}\langle x,e_k\rangle -\sum_k\beta_k\langle e_k,x\rangle +\sum_k|\beta_k|^2 \\
+		= \sum_k -2\text{re}(\beta_k\langle x,e_k\rangle)  +|\beta_k|^2                                       \\
+	\end{align}
+	From here we can complete the square by adding $|\langle x,e_k\rangle |^2$ and subtracting it:
+	\begin{align}
+		=\sum_k |\langle x,e_k\rangle-\beta_k|^2-|\langle x, e_k\rangle |^2
+	\end{align}
+	now note that this last term also has no dependence on $\beta_k$ so we can ignore it again:
+	\begin{align}
+		\sum_k|\langle x,e_k\rangle -\beta_k|
+	\end{align}
+	which  is obviously minimized when $\beta_k = \langle x, e_k\rangle$. So if we assume that this norm is minimized then $\beta_k=\langle x, e_k\rangle$ converselly if we assume that $\beta_k=\langle x, e_k\rangle$ then clearly it minimizes this norm
+
+\end{exercise}
+
+% Exercise 3.5.6
+\begin{exercise}{3.5.6} (HELP, do I need to take two separate limits? I believe that it would work out the exact same)
+
+	take
+	\begin{align}
+		\langle x,y\rangle                                                                                                                                                \\
+		=\langle \lim_{n \rightarrow \infty}\sum\limits_{j=1}^{n}\left(\alpha_j\right)e_j, \lim_{n \rightarrow \infty}\sum\limits_{j=1}^{n}\left(\beta_j\right)e_j\rangle \\
+	\end{align}
+	by continuity of inner product we can pull out the limits
+	\begin{align}
+		=\lim_{n \rightarrow \infty}\langle \sum\limits_{j=1}^{n}\left(\alpha_j\right)e_j, \sum\limits_{j=1}^{n}\left(\beta_j\right)e_j\rangle \\
+		=\lim_{n \rightarrow \infty}\sum_j^n\sum_k^n\langle \left(\alpha_j\right)e_j, \left(\beta_j\right)e_j\rangle                           \\
+		=\lim_{n \rightarrow \infty}\sum_k^n\alpha_k \overline{\beta_k}\rangle                                                                 \\
+	\end{align}
+	So thus it is proven
+\end{exercise}
+\end{document}

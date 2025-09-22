@@ -1,0 +1,323 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+% Exercise 1
+\begin{exercise}{1}
+	First we prove a lemma
+
+	This one is fun note that for a variable x when we want to maximize over y take:
+	\begin{align}
+		\frac{|x^*Ay|}{||x||_2||y||_2}                    \\
+		=\frac{|\langle y, A^*x\rangle |}{||x||_2||y||_2} \\
+		\leq\frac{|| y||_2 ||A^*x ||}{||x||_2||y||_2}     \\
+		=\frac{||A^*x ||}{||x||_2}                        \\
+	\end{align}
+	So we know that this quantity is always upper bounded by $\frac{||A^*x||}{||x||_2}$. However we can actually choose a y that achieve this bound. Note that for cauchy shwarts equality is achieve if one vector is a constant multiple of the other. There are two cases to consider now.
+
+	case 1: if $A^*x=0$ then this bound is trivially achieved because the final bound $\frac{||A^*x ||}{||x||_2}=0$ and the initial bound is $\frac{|x^*Ay|}{||x||_2||y||_2}=0$ regardless of $y$.
+
+	case 2: if $A^*x\neq 0$ then choose $y=A^*x$ and then the ineqality above turns into an equality (by equality for cauchy shwartz) and we actually achieve this bound. so:
+	\begin{align}
+		\sup_y\frac{|x^*Ay|}{||x||_2||y||_2} \\
+		=\frac{||A^*x ||}{||x||_2}           \\
+	\end{align}
+
+	Now assume that $A$ is invertible
+
+	Next we want to minimize this bound with respect to x:
+	\begin{align}
+		=\frac{||A^*x ||}{||x||_2} \\
+		=||A^*\frac{x}{||x||}||
+	\end{align}
+	before we move one we would like to note that in general we have that $||T^{-1}y||\leq ||T^{-1}||||y||$ for invertible T we have that $y=Tx,x=T^{-1}y$ so:
+	\begin{align}
+		||x||\leq||T^{-1}||||Tx||                    \\
+		\frac{1}{||T^{-1}||}\leq||T\frac{x}{||x||}|| \\
+	\end{align}
+	Then as a result we have since $A^*$ is invertible:
+	\begin{align}
+		=||A^*\frac{x}{||x||}|| \\
+		\geq \frac{1}{||(A^{-1})^*||}
+	\end{align}
+	so any choice of x will be lower bounded by this constant. We just need to find some choice of x that will achieve this bound. first choosing $x= A^{-*}z$ we get:
+	\begin{align}
+		=||A^*\frac{x}{||x||}|| \\
+		=\frac{||z||}{||A^{-*}z||}
+	\end{align}
+	note that since A is finite and invertible $A^{-*}$ has a finite norm and namely there is an z that achieve that bound such that $\frac{||A^{-*}z||}{||z||}=||A^{-*}||$. take that z then we have that:
+	\begin{align}
+		=\frac{1}{||A^{-*}||}
+	\end{align}
+	so we found a $x=A^{-*}z$ that achieves that bound. thus the $\inf_x\frac{||A^*x ||}{||x||_2}=\frac{1}{||A^{-*}||}$. Note that we are doing this in the two norm. So the largest singular value of $A^{-*}$ is the smallest singluar value of $A^*$ which is the smallest singular value of A (excluding zero singular values) so this just turns out to be $\sigma_\text{min}$ of A.
+
+	Now since A is invertible this this has a nonzero norm thus $\beta>0$
+
+	Assume that $\beta > 0$ we can do the supremum steps just like we did before because things cancel out from there we get that:
+	\begin{align}
+		0<\beta = \inf_x \frac{||A^*x||}{||x||}
+	\end{align}
+	assume by way of contradiction that A was not invertible. If this is the case then $A^{*}$ is also not invertible and we can choose $x\neq0, A^*x=0$ thus the infium of this function would be zero:
+	\begin{align}
+		\beta = \inf_x\frac{||A^*x||}{||x||}=0
+	\end{align}
+	but this contradicts $\beta>0$ so $A$ must be invertible.
+\end{exercise}
+
+% Exercise 2
+\begin{exercise}{2}
+	To prove this first note that we can obtain all of the nonzero singular values of A from eigenvalues of either $AA^T$ or $A^TA$. To prove this note (taking the reduced form):
+	\begin{align}
+		A^TA=V\Sigma U^TU\Sigma V \\
+	\end{align}
+	from here note that since $U$ is $m\times r$ then $U^TU=I_r$ so:
+	\begin{align}
+		= V\Sigma^2V^T
+	\end{align}
+	We can extend this to an orthonormal completion ($V_c$) for the zero singular value of A. but just notice that each of these $\sigma^2$ is an eigenvalue because:
+	\begin{align}
+		V_c\Sigma^2V_c^T=A^TA \\
+		V_C\Sigma^2=A^TAV_c
+	\end{align}
+	similarly for the other direction:
+	\begin{align}
+		AA^T=U\Sigma V^TV\Sigma U^T \\
+		=U\Sigma^2U^T
+	\end{align}
+	So now these same $\sigma^2$ are also the nonzero einvalues of $AA^T$. (the other zero ones can be obtained by orthonormal completion and appending zero eigenvalues as stated before)
+
+	So the non zero eigenvalue of $AA^T,A^TA$ coincide. thus We consider $QAA^TQ^T$.
+
+	This is a $m-1$ compression of $AA^T$. as a result the eigenvalues of this matrix will satisfy
+	\begin{align}
+		\sigma^2_i\leq \mu_i\leq \sigma^2_{i+1}
+	\end{align}
+	defining $\hat{\sigma_i}=\sqrt{\mu_i}$ we get:
+	\begin{align}
+		\sigma_i^2\leq \hat{\sigma_i}^2\leq \sigma_{i+1}^2
+	\end{align}
+	So taking square roots of all of the sides (since everything is nonnegative as a result of semipositive definiteness or the fact that the singular values are nonnegative):
+	\begin{align}
+		\sigma_i\leq \hat{\sigma_i}\leq \sigma_{i+1}
+	\end{align}
+	But these values are literally the square roots  of eigenvalues of $QA(QA)^T$. which  means that they are the singular values of $QA$
+\end{exercise}
+
+% Exercise 3
+\begin{exercise}{3}
+	first remember that all finite dimensional matrix norms are equivalent so that means for any matrix norm $||\cdot||$ there is a constant $M$ such that $||\cdot||\leq M||\cdot||_2$. So we will first prove density for  the two norm
+
+	let $\epsilon >0$ remember that the two norm of a matrix is simply its largest singular value. Take the svd of a matrix of rank r. $A=\sum_{k=1}^r\sigma_ku_kv_k^*$. Take the fullrank completion of u and v by just setting the remaining singular values to zero if any are zero $A=\sum_{k=1}^{\min(n,m)}\sigma_ku_kv_k^*$. Set $B=\sum_{k=1}^{\min(n,m)-1}\sigma_ku_kv_k^*+(\sigma_{\min(n,m)}+\epsilon)u_{\min(n,m)}v_{\min(n,m)}^*$. (Note if A is not full rank this is just multiplied by epsilon, but since we would have set it to zero it sthe same).
+
+	Take:
+	\begin{align}
+		||A-B||_2=                                                                                                                           \\
+		||\sum_{j=1}^{\min(n,m)-1}(\sigma_j-\sigma_j)u_jv_j^*+(\sigma_{\min(n,m)}-\sigma_{\min(n,m)}+\epsilon)u_{\min(n,m)}v_{\min(n,m)}||_2 \\
+		=||\epsilon u_{\min(n,m)}v_{\min(n,m)}||_2=\epsilon
+	\end{align}
+	So we can arbitrarily approximate any matrix in the 2 norm.
+
+	Now take an arbitary matrix norm note that:
+	\begin{align}
+		||A-B||\leq M||A-B||_2
+	\end{align}
+	choose B so that $||A-B||_2\leq \epsilon/M$ then:
+	\begin{align}
+		||A-B||\leq \epsilon
+	\end{align}
+	by that B.
+\end{exercise}
+
+% Exercise 4
+\begin{exercise}{4}
+
+	a)
+	Recall that unitary matrices satisfy $UU^H=U^HU=I$ so they are normal and as a result are unitarily diagonalizable. Furthremore note that all of their eigenvalues have magniture one:
+	\begin{align}
+		\langle v, v\rangle =\langle Uv, Uv\rangle =\langle \lambda v, \lambda v\rangle \\
+		=|\lambda|^2 \langle v, v\rangle
+	\end{align}
+	for some eigenvector $v$. note that since this was nonzero that means that $|\lambda|^2=1$ so they all have absolute magnitude one. as a result let each eigenvalue be $\lambda_j$ note that we can write this in polar form as $\lambda_j=e^{i \theta_j}$ for some theta since they are magnitude one (these thetas are real angles). then:
+	\begin{align}
+		U=Q\Lambda Q^{*}=Qe^{i\theta}Q^*
+	\end{align}
+	Where $\theta$ is the diagonal entries of our thetas we defined eralier
+
+	set $\Theta= Q\theta Q^*$ (this matrix is clearly hermitian since all of hte thetas are real) then clearly $e^{i\Theta}=Qe^{i\theta}Q^*=U$. And we are done
+
+	b) essentially what we need to show is that any matrix can be decomposed as a positive definite matrix and a unitary matrix
+
+	Note that earlier we have proven that if A matrix is hermitian positive definite it has a square root. take $\sqrt{A^*A}=S$ namely $V\Sigma V^T$ where $\Sigma$ is the square roots of hte eigenvalues so that $V\Sigma V^TV\Sigma^T V^T=V\Sigma^2V^T$ is the eigenvalue decomposition (we can do this since $A^*A$ is positive semidefinite and hermitian, so this square root is also positive semidefinite). Note this is also hermitian. but note that V is literally the svd right singular vectors of A so take:
+	\begin{align}
+		UV^TS=UV^TV\Sigma V^T=U\Sigma V^T=A
+	\end{align}
+	now note that if we took the full svd of A then $U,V$ are both unitary so $UV^T$ is also unitary. By part one we can write this as $e^{i\Theta}=UV^T$ so then:
+	\begin{align}
+		A=(UV^T)S=e^{i\Theta}S
+	\end{align}
+	So we have proved one part. with Hermitian S
+
+
+	Now similarly we can take the square root of $AA^*$ which is $R=U\Sigma U^T$ where $\Sigma$ is the square roots of the eigenvalues of $AA^*$ like before. (we can do this since $AA^*$ is positive semidefinite, so this square root is also positive semidefinite ) Then:
+	\begin{align}
+		RUV^T=U\Sigma U^TUV^T=U\Sigma V^T=A
+	\end{align}
+	So noticing that since like before $UV^T=e^{i\Theta}$ is orthonormal for  some hermitian $\Theta$ then:
+	\begin{align}
+		A=R(UV^T)=Re^{-i\Theta}
+	\end{align}
+	And from here we have proven all but the statement that $R$ and $S$ are orthonormally similar. This follows from the fact that $S=V\Sigma V^T$ we can multiply on both sides with $UV^T$ to transform this in to $R$. So the hermitian matrices are similar to one another.
+\end{exercise}
+
+% Exercise 5
+\begin{exercise}{5}
+
+	a) Assume that A is invertible. that means that all of its singular values are nonzero and each $U= \tilde{U},V^T= \tilde{V^T},\Sigma= \tilde{\Sigma}$ are full rank thus:
+	\begin{align}
+		AU^+=( \tilde{U} \tilde{\Sigma} \tilde{V^T}) \tilde{V} \tilde{\Sigma}^{-1} \tilde{U^T} \\
+		=U\Sigma V^TV\Sigma^{-1}U=U\Sigma \Sigma^{-1}U^T=UU^T=I
+	\end{align}
+	So this is the inverse.
+
+	b) from here on out just assume that the tildes are there, I don't want to type them all out. I will say if we are using the untruncated version
+	\begin{align}
+		(AA^+)AA^T \\
+		=U\Sigma V^T V\Sigma^{-1}U^TU\Sigma V^TV\Sigma^{-1}U^T
+	\end{align}
+	note that $V^T$ is an $r\times n$ matrix with orthonormal rows so $V^TV$ is $r\times r$ identity:
+
+	from here note that $U$ is an $m\times r$ matrx with orthonormal collumns so $U^TU$ is the identity $r\times r$:
+	\begin{align}
+		=U\Sigma \Sigma^{-1}\Sigma\Sigma^{-1}U^T \\
+		=U\Sigma \Sigma^{-1}U^T                  \\
+		=U\Sigma V^TV\Sigma^{-1}U^T              \\
+		=AA^+                                    \\
+	\end{align}
+	So it is a projection. Going even further with simplifying we get
+	\begin{align}
+		=U\Sigma V^TV\Sigma^{-1}U^T
+		=U\Sigma \Sigma^{-1}U^T
+		=UU^T
+	\end{align}
+	and this is just a projection onto the collumns space of $U$. So this is a projection onto the range of A.
+
+	Recall that if $P$ is a projection that $I-P$ is also a projection so $I-AA^+$ is a projection onto the orthogonal complement of the range of A which is the null space of $A^T$
+
+	Now in like manner take $A^+A$ then:
+	\begin{align}
+		A^+AA^+A                                              \\
+		=V\Sigma^{-1}U^TU\Sigma V^TV\Sigma^{-1}U^TU\Sigma V^T \\
+		=V\Sigma^{-1}U^TU\Sigma \Sigma^{-1}U^TU\Sigma V^T     \\
+		=V\Sigma^{-1}U^TUU^TU\Sigma V^T                       \\
+		=V\Sigma^{-1}U^TU\Sigma V^T                           \\
+		=A^+A
+	\end{align}
+	So its a projection. Specifically if we keep reducing we get $V\Sigma^{-1}U^TU\Sigma V^T=V\Sigma^{-1}\Sigma V^T=VV^T$ which is a projection onto the collumn space of V or the range of $A^T$.
+
+	Similarly $I-A^+A$ must also be a projection by the rationale proviced before. it is a projection onto the orthogonal complement of this which is the null space of $A$.
+
+	c) take:
+	\begin{align}
+		AA^+A=U\Sigma V^TV\Sigma^{-1}U^TU\Sigma V^T \\
+		=U\Sigma \Sigma^{-1}U^TU\Sigma V^T          \\
+		=UU^TU\Sigma V^T                            \\
+		=U\Sigma V^T                                \\
+	\end{align}
+	Oh so I guess it is true for all matrices! I guess that makes sense because $AA^+$ maps things to the collumn space of $A$. but after going through A we are already in the collumn space so this just functions as an identity
+
+	d) take $A^+A$ remember that we reduced this earlier to $VV^T$. so we have that if $VV^T=I_n$ then this is true. however $V$ is $n\times r$. So this can only be true if $V$ is full rank or we have at least $n$ nonzero singular value of $A$. In which case $V$ would be orthonormal with $VV^T=I_n$
+
+	Similarly for $AA^+$ recall that we reduced this to $UU^T$. We want this to be the $I_m$ identity. recall that $u$ is $m\times r$. So this can only be true if $U$ is full rank or we have at least m nonzero singular value of A. In which case U would be totally orthonormal with $UU^T=I_m$
+
+	e) (HELP, how does one do this?)
+
+\end{exercise}
+
+% Exercise 6
+\begin{exercise}{6}
+
+	For these problems I have been using the entire dataset. I do not show all of the images.
+
+	A) For this first part here are two sets of images I chose:
+
+	\includegraphics[width=\textwidth/2]{code/first_guy.png}
+
+	\includegraphics[width=\textwidth/2]{code/2_guy.png}
+
+	The accuracy mostly depended on the k I chose to approximate it, there not really variation in the faces I chose, but mostly the k. You can see that the accruacy gets a lot better and less blurry as we increase k. To do this I computed the svd using numpy of a single image (after I loaded it in with matplotlib in python). I then removed all but the first k singular values and the remultiplied $U,\Sigma,V^T$ to get the new approximation.
+
+	B) With this problem I took two different sets of images:
+
+
+	\includegraphics[width=\textwidth/2]{code/man_3.png}
+
+	\includegraphics[width=\textwidth/2]{code/man_4.png}
+
+	This one was more interesting, it took me more singular values to get a higher definition (consistent with the idea its harder to compress multipl images at once). And these ones there was variation if I chose different images, for example the second image came into clarity much faster than the first (although he opens his eyes which is kind of funny, most likely a result of the compression because most people are opening their eyes).
+
+	With this problem I loaded in all of the images and stacked their flattened versions into a matrix. I then took the svd like in the previous problem and kept only the first k nonsingular values before multiplying hte matrix back together. Note that in this case it was really important that I computed the reduced svd in numpy so I didn't crach my computer.
+
+
+	C) For this one we first want to center the data so we center each image around the mean image. We learned that the compression matrix is literally the first k collumns of the matrix $U$ where U is the U of the original data.. so we take the SVD and multiply our new matrix by $U_k^*$ so we multiply $U_k^*A_c$. I then plot the components:
+
+	\includegraphics[width=\textwidth/2]{code/pca_1.png}
+
+	\includegraphics[width=\textwidth/2]{code/pca_2.png}
+
+	These were somewhat separated by the type of lighting they were introduced to like center light or night light. That seemed to be the main differentiator as a lot of different face expressions seemed to congregate.
+
+\end{exercise}
+\end{document}

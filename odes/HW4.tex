@@ -1,0 +1,528 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 4.1
+\begin{exercise}{4.1}
+	a) for this first one notice that the characteristic polynomial is simply $\lambda^2-1=0$ so the eigenvalues are $-1,1$. with corresponding eigenvectors $v_1=[1,1]/\sqrt{2},v_2=[1,-1]/\sqrt{2}$. Constructing $V=[v_1,v_2]$ V is unitary so its inverse is its transpose $V^T$ thus:
+	\begin{align}
+		A=V\begin{bmatrix}1&0\\0&-1\end{bmatrix}V^T
+	\end{align}
+	So:
+	\begin{align}
+		e^{At}=V
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^t & 0      \\
+			0   & e^{-t}
+		\end{bmatrix}V^T                              \\
+		% 2 x 2 BMatrix 
+		=\frac{1}{\sqrt{2}}\begin{bmatrix}
+			                   1 & 1  \\
+			                   1 & -1
+		                   \end{bmatrix}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^t & 0      \\
+			0   & e^{-t}
+		\end{bmatrix}\frac{1}{\sqrt{2}}\begin{bmatrix}
+			                               1 & 1  \\
+			                               1 & -1
+		                               \end{bmatrix} \\
+		= \frac{1}{2}    % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{-t}+e^t & e^t-e^{-t} \\
+			e^t-e^{-t} & e^{-t}+e^t
+		\end{bmatrix}
+	\end{align}
+
+	b) For this one we take the characteristic polynomial:
+	\begin{align}
+		(1-\lambda)(-\lambda)+\frac{1}{4}=\lambda^2-\lambda+\frac{1}{4}
+	\end{align}
+	The roots of this are $\lambda =\frac{1}{2}$. I believe we will need to compute thee generalized eigenvector. We compute the first one:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1/2  & 1/2  \\
+			-1/2 & -1/2
+		\end{bmatrix}
+	\end{align}
+	The null space of this matrix is $v_1=[1,-1]$. We coompute the generalized eigenvector:
+	\begin{align}
+		\frac{1}{2}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1  & 1  \\
+			-1 & -1
+		\end{bmatrix}v_2=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			1 \\
+			-1
+		\end{bmatrix}
+	\end{align}
+	The generalized eigenvectvor here is clearly just $v_2=[1,1]$ setting $V=[v_1,v_2]$ we compute $V^{-1}=\frac{1}{2}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & -1 \\
+			1 & 1
+		\end{bmatrix}$
+
+	Then we can take the jordan normal form to be:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1  & 1 \\
+			-1 & 1
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			\frac{1}{2} & 1           \\
+			0           & \frac{1}{2}
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & -1 \\
+			1 & -1
+		\end{bmatrix}\frac{1}{2}
+	\end{align}
+	We can then compute the matrix exponential to be:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1  & 1 \\
+			-1 & 1
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{\frac{t}{2}} & e^{\frac{t}{2}}t \\
+			0               & e^\frac{t}{2}
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & -1 \\
+			1 & -1
+		\end{bmatrix}\frac{1}{2}
+	\end{align}
+	Note that I just did the jordan form matrix exponential in my head (its just a polynomial). Combining all of these together we get:
+	\begin{align}
+		\frac{e^\frac{t}{2}}{2}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			t+2 & t   \\
+			-t  & 2-t
+		\end{bmatrix}
+	\end{align}
+
+
+	c) For this third and final problem! We compute the characterstic polynomial as:
+	\begin{align}
+		(-\lambda)(-\rho-\lambda)+\omega^2 \\
+		=\lambda^2+\rho\lambda+\omega^2=0  \\
+		\lambda = \frac{-\rho \pm \sqrt{\rho^2-4\omega^2}}{2}
+	\end{align}
+	Nowe we also compute the eigenvectors:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			\frac{\rho\mp\sqrt{\rho^2-4\omega^2}}{2} & 1                                          \\
+			-\omega^2                                & \frac{-\rho\mp \sqrt{\rho^2-4\omega^2}}{2}
+		\end{bmatrix}
+	\end{align}
+	If you squint then we can see that the eigenvectors are
+	\begin{align}
+		v_1=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			\frac{-\rho\pm\sqrt{\rho^2-4\omega^2}}{2\omega^2} \\
+			1
+		\end{bmatrix} \\
+	\end{align}
+	Because this exactly cancels out the bottom term.
+
+	Ok so now what is important is if $\rho^2<4\omega^2$ if that is the case then we will want to convert to the standard form for imaginary ones. Assume for the moment that $\rho^2<4\omega^2$
+	\begin{align}
+		v_1=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			\frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2\omega^2} \\
+			1
+		\end{bmatrix}  \\
+		\begin{bmatrix}
+			\frac{-\rho+i\sqrt{4\omega^2-\rho^2}}{2\omega^2} \\
+			1
+		\end{bmatrix} \\
+	\end{align}
+	for this we need to convert to the normal form by constructing $V=[\text{re}(v_1),\text{im}(v_1)]=[% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			\frac{-\rho}{2\omega^2} \\
+			1
+		\end{bmatrix}]% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			\frac{\sqrt{4\omega^2-\rho^2}}{2\omega^2} \\
+			0
+		\end{bmatrix}$. this matrix has inverse:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0                                         & 1                                    \\
+			\frac{2\omega^2}{\sqrt{4\omega^2-\rho^2}} & \frac{\rho}{\sqrt{4\omega^2-\rho^2}}
+		\end{bmatrix}
+	\end{align}
+	From here we know that the standard form then looks like:
+	\begin{align}
+		V % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			\frac{-\rho}{2}                   & -\frac{\sqrt{4\omega^2-\rho^2}}{2} \\
+			\frac{\sqrt{4\omega^2-\rho^2}}{2} & -\frac{\rho}{2}
+		\end{bmatrix}V^{-1}
+	\end{align}
+	The exponential of this center matrix is
+	\begin{align}
+		e^{-\rho t/2} % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			\cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & -\sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) \\
+			\sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t)
+		\end{bmatrix}
+	\end{align}
+	So the general solution when $\rho^2<4\omega^2$ is:
+	\begin{align}
+		e^{At}=e^{\frac{\rho t}{2}}V\begin{bmatrix}
+			                            \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & -\sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) \\
+			                            \sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t)
+		                            \end{bmatrix}V^{-1}
+	\end{align}
+	which simplifies to:
+	\begin{align}
+		\begin{pmatrix}e^{-t\rho/2}\frac{\rho\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)+\cos \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)\sqrt{-\rho^2+4\omega^2}}{\sqrt{-\rho^2+4\omega^2}} & e^{-\rho t/2}\frac{2\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{-\rho^2+4\omega^2}}                                                                               \\
+               e^{-t\rho/2}\left(-\frac{2\omega^2\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{-\rho^2+4\omega^2}}\right)                                                            & e^{-t\rho/2}\frac{\cos \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)\sqrt{4\omega^2-\rho^2}-\rho\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{4\omega^2-\rho^2}}\end{pmatrix}
+	\end{align}
+
+	In the case where $\rho^2>4\omega^2$ then we will have two eigenvalues and two lineraly independet eigenvectors that are as stated before:
+	\begin{align}
+		V=\begin{bmatrix}
+			  \frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2\omega^2} & \frac{-\rho-\sqrt{\rho^2-4\omega^2}}{2\omega^2} \\
+			  1                                               & 1
+		  \end{bmatrix}
+	\end{align}
+	This matrix has inverse:
+	\begin{align}
+		V^{-1}=\frac{1}{2\sqrt{\rho^2-4\omega^2}}
+		\begin{bmatrix}
+			2\omega^2  & \sqrt{\rho^2-4\omega^2}+\rho  \\
+			-2\omega^2 & \sqrt{\rho^2-4\omega^2} -\rho
+		\end{bmatrix}
+	\end{align}
+	So then the matrix exponential for this one is thus:
+	\begin{align}
+		e^{At}=V % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{t\frac{-\rho + \sqrt{\rho^2-4\omega^2}}{2}
+			} & 0                                             \\
+			0 & e^{t\frac{-\rho - \sqrt{\rho^2-4\omega^2}}{2}
+				}
+		\end{bmatrix}V^{-1}
+	\end{align}
+	Which once simplified is:
+	\begin{align}
+		\begin{pmatrix}\frac{e^{t\frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2}}\left(-\rho+\sqrt{\rho^2-4\omega^2}\right)-e^{t\frac{-\rho-\sqrt{\rho^2-4\omega^2}}{2}}\left(-\rho-\sqrt{\rho^2-4\omega^2}\right)}{2\sqrt{\rho^2-4\omega^2}} & \frac{-e^{t\frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2}}+e^{t\frac{-\rho-\sqrt{\rho^2-4\omega^2}}{2}}}{\sqrt{\rho^2-4\omega^2}}                                                                                   \\
+               \frac{\omega^2\left(-e^{t\frac{-\rho-\sqrt{\rho^2-4\omega^2}}{2}}+e^{t\frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2}}\right)}{\sqrt{\rho^2-4\omega^2}}                                                                & \frac{e^{t\frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2}}\left(\sqrt{\rho^2-4\omega^2}+\rho\right)+e^{t\frac{-\rho-\sqrt{\rho^2-4\omega^2}}{2}}\left(\sqrt{\rho^2-4\omega^2}-\rho\right)}{2\sqrt{\rho^2-4\omega^2}}\end{pmatrix}
+	\end{align}
+
+	Finally if $\rho^2=4\omega^2$. Then we will have to use the generalize eigenspace because we will have a degenerate eigenvalue at $-\rho/2$. to do this first note that one eigenvector remains the same $% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			- \rho/(2\omega^2) \\
+			1
+		\end{bmatrix}$ but from here noteice that $\rho=4\omega^2$. so this eigenvector is just $% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			-2/\rho \\
+			1
+		\end{bmatrix}$ We need to now find the generalized eigenvector. take:
+	\begin{align}
+		\begin{bmatrix}
+			\frac{\rho}{2} & 1               \\
+			-\omega^2      & \frac{-\rho}{2}
+		\end{bmatrix}v=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			-2/\rho \\
+			1
+		\end{bmatrix}
+	\end{align}
+	so clearly $v_2=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			\frac{-4}{\rho^2} \\
+			0
+		\end{bmatrix}$. We can then almost construct the jordan decomposition. We take the matrix V:
+	\begin{align}
+		V=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			-2/\rho & -4/\rho^2 \\
+			1       & 0
+		\end{bmatrix}
+	\end{align}
+	From here the inverse of this is:
+	\begin{align}
+		V^{-1} = % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0         & 1       \\
+			-\rho^2/4 & -\rho/2
+		\end{bmatrix}
+	\end{align}.
+	So then the jodran decomposition is
+	\begin{align}
+		A=V % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			-\rho/2 & 1       \\
+			0       & -\rho/2
+		\end{bmatrix}V^{-1}
+	\end{align}
+	The matrix exponential of the inside is just $e^{-\frac{\rho}{2}t}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & t \\
+			0 & 1
+		\end{bmatrix}$. So then our final answer for this one is:
+	\begin{align}
+		e^{At}=V % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{-\frac{\rho}{2} t} & e^{-\frac{\rho}{2} t} t \\
+			0                     & e^{-\frac{\rho}{2} t}
+		\end{bmatrix}V^{-1}
+	\end{align}
+	which multiplied out is:
+	\begin{align}
+		\begin{pmatrix}\left(\left(-2/\rho\right)e^{-\frac{\rho}{2}t}t+\left(-4/\rho^2\right)e^{-\frac{\rho}{2}t}\right)\left(-\rho^2/4\right) & \left(-2/\rho\right)e^{-\frac{\rho}{2}t}+\left(\left(-2/\rho\right)e^{-\frac{\rho}{2}t}t+\left(-4/\rho^2\right)e^{-\frac{\rho}{2}t}\right)\left(-\rho/2\right) \\
+               e^{-\frac{\rho t}{2}}t\left(-\rho^2/4\right)                                                                            & e^{-\frac{\rho t}{2}}+e^{-\frac{\rho t}{2}}t\left(-\rho/2\right)\end{pmatrix}
+	\end{align}
+\end{exercise}
+
+% Exercise 4.2
+\begin{exercise}{4.2}
+	writing $x_1=u,x_2=u'$ we get:
+	\begin{align}
+		% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			x_1' \\
+			x_2'
+		\end{bmatrix}   =\begin{bmatrix}
+			                 x_2 \\
+			                 -2x_2-x_1
+		                 \end{bmatrix} \\
+		=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0  & 1  \\
+			-1 & -2
+		\end{bmatrix}  % 2 x 1 BMatrix 
+		\begin{bmatrix}
+			x_1 \\
+			x_2
+		\end{bmatrix}
+	\end{align}
+	to solve this  we need to compute the matrix exponential. For this I will first find the eigenvalues of A:
+	\begin{align}
+		(\lambda)(\lambda+2)+1=\lambda^2+2\lambda+1=(\lambda+1)^2
+	\end{align}
+	So we have a repeated eigenvalue at $\lambda=-1$ to find the first eigenvector take:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1  & 1  \\
+			-1 & -1
+		\end{bmatrix}
+	\end{align}
+	Obviously the null space of this is $v_1=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			1 \\
+			-1
+		\end{bmatrix}$. So that is our first eigenvector. We need to solve for the second generalized one
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1  & 1  \\
+			-1 & -1
+		\end{bmatrix}v_2=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			1 \\
+			-1
+		\end{bmatrix}
+	\end{align}
+	Once again the solution here is clear just take $v_2=\frac{1}{2}% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			1 \\
+			1
+		\end{bmatrix}$
+
+	So the transformation vector is $[v_1,v_2]2$ The inverse of this is:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1  & 1/2 \\
+			-1 & 1/2
+		\end{bmatrix}^{-1}=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1/2 & -1/2 \\
+			1   & 1
+		\end{bmatrix}
+	\end{align}
+
+	So our jordan normal form is:
+	\begin{align}
+		\begin{bmatrix}
+			1  & 1/2 \\
+			-1 & 1/2
+		\end{bmatrix} % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			-1 & 1  \\
+			0  & -1
+		\end{bmatrix}\begin{bmatrix}
+			             1/2 & -1/2 \\
+			             1   & 1
+		             \end{bmatrix}
+	\end{align}
+	From this we can apply the matrix exponential:
+	\begin{align}
+		e^{At}=
+		\begin{bmatrix}
+			1  & 1/2 \\
+			-1 & 1/2
+		\end{bmatrix} % 2 x 2 BMatrix 
+		e^{Jt}\begin{bmatrix}
+			      1/2 & -1/2 \\
+			      1   & 1
+		      \end{bmatrix}
+	\end{align}
+	from here we know that $e^{Jt}=e^{\Lambda t}(I+% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0 & t \\
+			0 & 0
+		\end{bmatrix})=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{-t} & te^{-t} \\
+			0      & e^{-t}
+		\end{bmatrix}$
+	So the general solution with initial data $u(0)=u_0,u'(0)=u_1$ is (setting $x_0=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			u_0 \\
+			u_1
+		\end{bmatrix}$)
+	\begin{align}
+		e^{At}=
+		\begin{bmatrix}
+			1  & 1/2 \\
+			-1 & 1/2
+		\end{bmatrix} % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{-t} & te^{-t} \\
+			0      & e^{-t}
+		\end{bmatrix}\begin{bmatrix}
+			             1/2 & -1/2 \\
+			             1   & 1
+		             \end{bmatrix}     \\
+		x(t)=
+		\begin{bmatrix}
+			1  & 1/2 \\
+			-1 & 1/2
+		\end{bmatrix} % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{-t} & te^{-t} \\
+			0      & e^{-t}
+		\end{bmatrix}\begin{bmatrix}
+			             1/2 & -1/2 \\
+			             1   & 1
+		             \end{bmatrix}x_0   \\
+		=  % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			e^{-t}+te^{-t} & te^{-t}        \\
+			-te^{-t}       & e^{-t}-te^{-t}
+		\end{bmatrix}x_0 \\
+		=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			u_0(e^{-t}+te^{-t})+u_1te^{-t} \\
+			u_0(-te^{-t})+u_1(e^{-t}-te^{-t})
+		\end{bmatrix}
+	\end{align}
+	so since $x_1=u$ we have that:
+	\begin{align}
+		u=u_0(e^{-t}+te^{-t})+u_1te^{-t}
+	\end{align}
+\end{exercise}
+
+% Exercise 4.3
+\begin{exercise}{4.3}
+	To prove this we first solve for either eigenvalue:
+	\begin{align}
+		\lambda_1+\lambda_2=T      \\
+		\lambda_1 \lambda_2=D      \\
+		\lambda_2=T-\lambda_1      \\
+		\lambda_1(T-\lambda_1)=D   \\
+		\lambda_1^2-T\lambda_1+D=0 \\
+		\lambda_1=\frac{T\pm\sqrt{T^2-4D}}{2}
+	\end{align}
+	From here notice that $\lambda_2=T-\lambda_1=\frac{T\mp\sqrt{T^2-4D}}{2}$. So the two solutions are just given by:
+	\begin{align}
+		\lambda_{1}=\frac{T+ \sqrt{T^2-4D}}{2}
+		\lambda_{2}=\frac{T- \sqrt{T^2-4D}}{2}
+	\end{align}
+	When graphed on desmos we get
+
+	\includegraphics[width=\textwidth/2]{images/detTrace.png}
+
+	Where the trace $T$ is the x axis and the determinant $D$ is the y axis. Here I will label each region:
+
+	I use x and y here, but just mentally remember $x=$Trace $y=$Determinant
+	\begin{itemize}
+		\item for $x<0,0<y\leq \frac{x^2}{4}$ (the lower blue region) we have stable nodes (both eigenvalues are real and negative)
+		\item for $x>0,0<y\leq \frac{x^2}{4}$ (the lower red region) we have unstable nodes (both eigenvalues are real and positive)
+		\item for $,y\leq 0$ and not including $(x,y)=(0,0)$ (the orange region) we have saddle nodes (both eigenvalues are real, one is negative and one is positive and either could potentially be zero but not both)
+		\item for $x=0,y\geq 0$ (the purple line) we have the center nodes where both eigenvalues have zero real part.
+		\item for $x<0,y>\frac{x^2}{4}$ (the upper blue region) we have stable spirals (both eigenvalues have negative real part and some imaginary part)
+		\item for $x>0,y>\frac{x^2}{4}$ (the upper red region) we have unstable spirals (both eigenvalues have positive real part and some imaginary part)
+	\end{itemize}
+
+\end{exercise}
+
+\end{document}

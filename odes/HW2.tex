@@ -1,0 +1,270 @@
+
+\documentclass[12pt]{article}
+% This package simply sets the margins to be 1 inch.
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{marvosym}% This adds the contradiction command (\Lightning)
+% These packages include nice commands from AMS-LaTeX
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Define an environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+
+% define shortcut commands for commonly used symbols
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\nR}{\mathcal{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\xk}{x_k}
+\newcommand{\yk}{y_k}
+\newcommand{\na}{n_A}
+\newcommand{\nb}{n_B}
+\newcommand{\nab}{n_{AB}}
+\newtheorem*{remark}{Remark}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\begin{document}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 2
+\end{center}
+% Exercise 2.1
+\begin{exercise}{2.1}
+
+	Note for this problem we want to find the Lipshitz bound L. This is the same as bounding the norm of the derivative with respect to mu. Then take:
+	\begin{equation}
+		\frac{d}{d\mu}\frac{dx}{dt}                                                              \\
+		=\frac{d}{dt}\frac{dx}{d\mu}\text{ because we are in }C^1                                  \\
+		\int_0^t\frac{d}{d\mu}\frac{dx}{dt}ds=\int_0^t\frac{d}{dt}\frac{dx}{d\mu}ds              \\
+		\frac{dx}{d\mu}=\int_0^t\frac{d}{d\mu}\frac{dx}{dt}ds                                    \\
+		\frac{dx}{d\mu}=\int_0^t\frac{d}{d\mu}f(s,x_\mu(s),\mu)ds                                \\
+		\frac{dx}{d\mu}=\int_0^tf_x(s,x_\mu(s),\mu)\frac{dx}{d\mu}+f_\mu(s,x_\mu(s),\mu)ds       \\
+		|\frac{dx}{d\mu}|=\int_0^t|f_x(s,x_\mu(s),\mu)\frac{dx}{d\mu}|+|f_\mu(s,x_\mu(s),\mu)|ds \\
+		|\frac{dx}{d\mu}|=Mt+\int_0^tL|\frac{dx}{d\mu}|ds
+	\end{equation}
+	So then by the advanced gronwalls inequality.
+	\begin{align}
+		|\frac{dx}{d\mu}|\leq Mt+\int_0^tLMse^{\int_s^tLdu}ds \\
+		=M(t+L\int_0^tse^{L(t-s)}ds                           \\
+		=M(t+Le^{Lt}\int_0^tse^{-Ls}ds                        \\
+		=M(t+Le^{Lt}(\frac{1-e^{-Lt}(Lt-1)}{L^2}))            \\
+		=M(t+e^{Lt}(\frac{1-e^{-Lt}(Lt-1)}{L}))               \\
+		=M(t-t+\frac{1}{L}(e^{Lt}-1))                         \\
+		= \frac{M}{L}(e^{Lt}-1)                               \\
+	\end{align}
+	So the bound on the lipshitz constant is $ \frac{M}{L}(e^{Lt}-1)$ so:
+	\begin{align}
+		||x_\mu-x_\nu||\leq  \frac{M}{L}(e^{Lt}-1)|\mu-\mu|
+	\end{align}
+	uniformly in t. That is the answer.
+
+	\textbf{Alternative method}:
+
+	Alternatively you can do a different method with derivative tricks, note this is not my main answer but is included for completeness.
+
+	For this problem note that we can write the integral form:
+	\begin{align}
+		x_\mu(t) = x_0+\int_0^tf(s,x_\mu(s),\mu)ds
+	\end{align}
+	Now take:
+	\begin{align}
+		x_\mu(t)-x_\nu(t)=
+		= \int_0^t f(s,x_\mu,\mu)-f(s,x_\nu,\nu)                               \\
+		= \int_0^t f(s,x_\mu,\mu)-f(s,x_\nu,\mu)+f(s,x_\nu,\mu)-f(s,x_\nu,\nu) \\
+		= \int_0^t f(s,x_\mu,\mu)-f(s,x_\nu,\mu)+f(s,x_\nu,\mu)-f(s,x_\nu,\nu) \\
+	\end{align}
+
+	Taking norms and applying the triangle inequality we obtain:
+	\begin{align}
+		\norm{x_\mu-x_\nu} \\
+		\leq \int_0^t ||f(s,x_\mu,\mu)-f(s,x_\nu,\mu)||ds+\int_0^t||f(s,x_\nu,\mu)-f(s,x_\nu,\nu)|| ds
+	\end{align}
+	Now the goal is to bound each of those norms
+	Take
+	\begin{align}
+		\norm{f(s,x_\mu,\mu)-f(s,x_\nu,\mu)}= \norm{\int_0^1 f_x(s,x_\nu+\tau(x_\mu-x_\nu),\mu)(x_\mu-x_\nu)d\tau} \\
+		\leq\int_0^1\norm{f_x}|x_\mu-x_\nu|d\tau                                                                   \\
+		\leq L |x_\mu-x_\nu|
+	\end{align}
+	Now to bound the other one:
+	\begin{align}
+		\norm{f(s,x_\nu,\mu)-f(s,x_\nu,\nu)}                                 \\
+		\leq \norm{\int_0^1 f_\mu(s,x_\nu, \nu+\tau(\mu-\nu))(\mu-\nu)d\tau} \\
+		\leq \int_0^1 M|\mu-\nu|d\tau                                        \\
+		=M|\mu-\nu|
+	\end{align}
+
+	Thus in total we have that:
+	\begin{align}
+		\norm{x_\mu-x_\nu}                                                                             \\
+		\leq \int_0^t ||f(s,x_\mu,\mu)-f(s,x_\nu,\mu)||ds+\int_0^t||f(s,x_\nu,\mu)-f(s,x_\nu,\nu)|| ds \\
+		\leq \int_0^tL |x_\mu-x_\nu|ds+\int_0^t M|\mu-\nu|ds                                           \\
+		\leq L\int_0^t |x_\mu-x_\nu|ds+tM|\mu-\nu|
+	\end{align}
+	Using the more general gronwall inequality we derived earlier we have:
+	\begin{align}
+		a(t)=tM|\mu-\nu| \\
+		b(t)=L           \\
+		c(s)=1
+	\end{align}
+	Then:
+	\begin{align}
+		\norm{x_\mu-x_\nu}\leq tM|\mu-\nu|+L(\int_0^tsM|\mu-\nu|e^{\int_s^tLdu}ds) \\
+		=M|\mu-\nu|(t+L\int_0^tse^{(t-s)L}ds)                                      \\
+		=M|\mu-\nu|(t+L\frac{-Lt+e^{Lt}-1}{L^2})                                   \\
+		=M|\mu-\nu|(t+\frac{-Lt+e^{Lt}-1}{L})                                      \\
+		=M|\mu-\nu|(t-t+\frac{e^{Lt}-1}{L})                                        \\
+		=M|\mu-\nu|(\frac{e^{Lt}-1}{L})                                            \\
+		=\frac{M}{L} (e^{Lt}-1)|\mu-\nu|                                           \\
+	\end{align}
+
+	So it is lipshitz. and the lipshitz bound is:
+	\begin{align}
+		\frac{M}{L} (e^{Lt}-1)
+	\end{align}
+
+	Which is dependent on t.
+
+	% NOTE: From this firstr problem. I learned that if I have multiple components I can use the triangle inequality first to separate them. Then use the multivariate calculus trick, Then gronwalls advanced inequality.
+
+	% NOTE: from the second problem. just follow proofs through
+\end{exercise}
+
+% Exercise 2.2
+\begin{exercise}{2.2}
+
+	a)
+	To show its unique we will use  the standard argument take:
+	\begin{align}
+		x(t)=x_0+\int_0^tf(x(s),s)ds
+	\end{align}
+	as the integral form of hte IVP. then assuming we have two different solutions
+	\begin{align}
+		x(t)-y(t)=x_0-y_0+\int_0^t f(x(s),s)-f(y(s),s)ds          \\
+		|x(t)-y(t)|\leq|x_0-y_0|+\int_0^t |f(x(s),s)-f(y(s),s)|ds \\
+		\leq|x_0-y_0|+\int_0^t p(|x(s)-y(s)|)ds                   \\
+	\end{align}
+	At this point we would really like to use gronwalls inequality, but we cannot here. We will now prove a variant.
+
+	Assume that $\phi(t)\leq A+\int_0^tp(\phi(s))ds$
+	set $u(t)=A+\int_0^tp(\phi(s))ds$ where A is positive and p is monotonically increasing and nonnegative. then because $p$ is continuous by the FTC we can take derivatives:
+	\begin{align}
+		u'(t)=p(\phi(t))\leq p(u(t))
+	\end{align}
+	That follows because p is monotonically increasing. then:
+	\begin{align}
+		\frac{u'}{p(u(t))}\leq1                   \\
+		\int_0^t \frac{u'(s)}{p(u(s))}ds\leq t    \\
+		\int_{u(0)}^{u(t)} \frac{1}{p(s)}ds\leq t \\
+		% \int_{|x_0-y_0|}^{u(t)} \frac{1}{p(s)}ds\leq t\\
+		% \ln(|p(u(t))|)-\ln(|p(|x_0-y_0|)|)\leq t\\
+	\end{align}
+	Now note that becaue $p$ is increasing $\frac{1}{p}$ is decreasing. As a result $\int_0^\frac{h}{2}\frac{1}{p(s)}\geq \int_\frac{h}{2}^h \frac{1}{p(s)}$. From this we can gather that
+	\begin{align}
+		2\int_0^\frac{1}{2} \frac{1}{p(s)} \geq \int\limits_{0}^{1/2} \frac{1}{p(s)} ds +\int\limits_{1/2}^{1} \frac{1}{p(s)} ds = \infty \text{ by assumption}
+	\end{align}
+	So $\int_0^{1/2} \frac{1}{p(s)} ds = \infty$. Similarly $\int_0^{1/4} \frac{1}{p(s)}ds=\infty$ and by induction $\int\limits_{0}^{1/2^k}1/p(s)ds = \infty$. As a result of this if the upper limit is anything other than zero, the integral is infinity.
+
+	From here note that the inequality we have derived
+	\begin{align}
+		\int_{u(0)}^{u(t)} \frac{1}{p(s)}ds\leq t
+	\end{align}
+	Lets plug in things that we derived earlier in our quest for finding a unique solution. We would set $A=|x_0-y_0|$ and $\phi(s)=|x(s)-y(s)|$.  From here we are ready to prove uniqueness. Assume that with these solutions $y_0=x_0$
+
+	from this we gather that $A=0=u(0)$.  from this take a closer look at our previous inequality
+	\begin{align}
+		\int_{u(0)}^{u(t)} \frac{1}{p(s)}ds\leq t \\
+		\int_{0}^{u(t)} \frac{1}{p(s)}ds\leq t
+	\end{align}
+
+	However we know by the osgood condition that the integral blows up, specifically if the upper integrand is nonzero. So the only way this inequality holds is if $u(t)=0$ for all time t. Which in turn means:
+	\begin{align}
+		\phi(t)\leq u(t)=0 \\
+		\phi(t)=||x(t)-y(t)||=0
+	\end{align}
+	So $x(t)=y(t)$
+
+
+	b) For this part we jump straight to:
+
+	\begin{align}
+		\frac{u'(t)}{p(u(t))}\leq 1              \\
+		\frac{u'(t)}{Lu(t)(1+|\log u(t)|)}\leq 1 \\
+	\end{align}
+	Note that for small $u(t)$ $|\log(u(t))|=-\log(u(t))$ for $|u(t)|<1$ while for $u(t)>1$ it is $\log(u(t))$. Furtherome not that because $\rho$ is positive and increasing we have that $u(t)$ is strictly increasing. (It is a positive number plus the integral of a positive number)
+
+	As a result we can split up our integral as thus:
+	\begin{align}
+		\int_{u(0)}^{u(t)}\frac{dv}{Lv(1-\log(v))}                                                            \\
+		\frac{1}{L}\int_{u(0)}^{1}\frac{dv}{v(1-log(v)}+\frac{1}{L}\int_1^{u(t)}\frac{dv}{v(1+\log(v))}\leq t \\
+		\int_{0}^{1}\frac{dv}{v(1-log(v))}+\int_1^{u(t)}\frac{dv}{v(1+\log(v))}\leq Lt                        \\
+		-\log(1-\log(v))|_{v=u(0)}^{v=1}+\log(1+\log(v))|_{v=1}^{v=u(t)}\leq Lt                               \\
+		-\log(1-\log(1))+\log(1-\log(u(0)))+\log(1+\log(u(t)))-\log(1+\log(1))\leq Lt                         \\
+		\log(1-\log(u(0)))+\log(1+\log(u(t)))\leq Lt                                                          \\
+		\log(1+\log(u(t)))\leq Lt-\log(1-\log(u(0)))                                                          \\
+		1+\log(u(t))\leq e^{Lt-\log(1-\log(|x_0-y_0|))}                                                       \\
+		\log(u(t))\leq e^{Lt}\frac{1}{1-\log(|x_0-y_0|))}-1                                                   \\
+		u(t)\leq e^{e^{Lt}\frac{1}{1-\log(|x_0-y_0|))}-1}                                                     \\
+	\end{align}
+	% So this is the case for when the initial conditions may start close $|x_0-y_0|<1$ but $u(t)$ eventually grows greater than 1.
+	Here is a graph of the normal lipshitz bound $e^{Lt}|x_0-y_0|$ in red verses the new bound $e^{e^{Lt}\frac{1}{1-\log(|x_0-y_0|))}-1}$ in blue. You can see that the new bound grows way faster! This can be seen in the equation just because we will have an exponential to a positive exponential (because $\frac{1}{1-\log(|x_0-y_0|)}>0$ in this case). Note for the graph I set $x_0=0,y_0=0.1,L=1$
+
+	\includegraphics[width=\textwidth/2]{images/gronwally.png}
+
+	% If $u(t)$ never grows greater than one:
+	% \begin{align}
+	% 	\frac{1}{L}\int_{0}^{t}\frac{u'(t)}{u(t)(1-log(u(t)))}\leq t \\
+	% 	-\log(1-\log(u(t)))|_{0}^{t}\leq Lt                          \\
+	% 	-\log(1-\log(u(t))+\log(1-\log(u(0)))\leq Lt                 \\ \log(1-\log(u(t)))\geq \log(1-\log(|x_0-y_0|))-Lt            \\
+	% 	1-\log(u(t))\geq (1-\log(|x_0-y_0|))e^{-Lt}                  \\
+	% 	\log(u(t))\leq 1-(1-\log(|x_0-y_0|))e^{-Lt}                  \\
+	% 	u(t)\leq e^{1-(1-\log(|x_0-y_0|))e^{-Lt}}                    \\
+	% \end{align}
+	% thus we have $|x(s)-y(s)|\leq e^{-e^{-Lt}(1-\log|x_0-y_0|)+1}         $.
+
+	% We graph this for $L=1,x_0=0,y_0=.1$ verses the normal lipshitz bound. $e^{Lt}$
+
+	% And that is the inequality bound
+
+	in the second case for $|x_0-y_0|>1$ then $|\log(u(t))|=\log(u(t))$ so we don't have to split up the integral (Since u(t) is increasing it will always be greater than 1)
+	\begin{align}
+		\frac{1}{L}\int_{0}^{t}\frac{u'(t)}{u(t)(1+log(u(t)))}\leq t \\
+		\log(1+\log(u(t)))|_{0}^{t}\leq Lt                           \\
+		\log(1+\log(u(t))-\log(1+\log(u(0)))\leq Lt                  \\
+		\log(1+\log(u(t)))\leq \log(1+\log(|x_0-y_0|))+Lt            \\
+		1+\log(u(t))\geq (1+\log(|x_0-y_0|))e^{Lt}                   \\
+		\log(u(t))\leq -1+(1+\log(|x_0-y_0|))e^{Lt}                  \\
+		u(t)\leq e^{-1+(1+\log(|x_0-y_0|))e^{Lt}}                    \\
+	\end{align}
+	So in the second case this is the bound on $u(t)=|x(s)-y(s)|\leq e^{e^{Lt}(1+\log|x_0-y_0|)-1} $
+
+	Here is a graph of the normal lipshitz bound $e^{Lt}|x_0-y_0|$ in red verses the new bound $e^{e^{Lt}(1+\log|x_0-y_0|)-1} $ in blue. You can see that the new bound grows way faster! This can be seen in the equation just because we will have an exponential to a positive exponential (because $1+\log(|x_0-y_0|)>0$ in this case). Note for the graph I set $x_0=0,y_0=1.1,L=1$
+
+	\includegraphics[width=\textwidth/2]{images/gronwally2.png}
+\end{exercise} \end{document}

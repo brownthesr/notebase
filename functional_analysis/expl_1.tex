@@ -1,0 +1,114 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Sept 13, 2025
+\end{flushright}
+\begin{center}
+	Explanation 1
+\end{center}
+
+So what we are trying to do is justify going from:
+\begin{align}
+	\sqrt{\sum\limits_{j=1}^{n}(\sum_{k=1}^nc_{jk}(\xi_k-\zeta_k))^2} \\
+\end{align}
+to:
+\begin{align}
+	\leq \sum_k\sqrt{\sum\limits_{j=1}^{n}(c_{jk}(\xi_k-\zeta_k))^2}
+\end{align}
+in other words why can we take the sum out of the square root? I'll justify this right here. So remember if we have a vector $x$ indexed by $x_j$ then the two norm of this vector is given by:
+\begin{align}
+	\norm{x}=\sqrt{\sum_{j=1}^n(x_j)^2}
+\end{align}
+if we set $x_j$ equal to $\sum_{k=1}^n c_{jk}(\xi_k-\zeta_k)$ then notice the whole vector x looks like:
+\begin{align}
+	x= % 3 x 1 BMatrix 
+	\begin{bmatrix}
+		\sum_{k=1}^nc_{1k}(\xi_k-\zeta_k) \\
+		\vdots                            \\
+		\sum_{k=1}^nc_{nk}(\xi_k-\zeta_k)
+	\end{bmatrix}
+\end{align}
+rewriting this by factoring out the sum we get:
+\begin{align}
+	x=\sum_{k=1}^n\begin{bmatrix}
+		              c_{1k}(\xi_k-\zeta_k) \\
+		              \vdots                \\
+		              c_{nk}(\xi_k-\zeta_k)
+	              \end{bmatrix}
+\end{align}
+So x is in reality a linear combination of these c vectors. So in total we have:
+\begin{align}
+	\sqrt{\sum\limits_{j=1}^{n}(\sum_{k=1}^nc_{jk}(\xi_k-\zeta_k))^2} \\
+	=\sqrt{\sum_{j=1}^n(x_j)^2} \text{ by definition of } x_j         \\
+	=\norm{x}_2                                                       \\
+	=\norm{\sum_{k=1}^n\begin{bmatrix}
+			                   c_{1k}(\xi_k-\zeta_k) \\
+			                   \vdots                \\
+			                   c_{nk}(\xi_k-\zeta_k)
+		                   \end{bmatrix}
+	} \text{ by what we did in (6)}
+\end{align}
+From here we can now apply the triangle inequality because of the two norm here:
+\begin{align}
+	\leq \sum_{k=1}^n\norm{\begin{bmatrix}
+			                       c_{1k}(\xi_k-\zeta_k) \\
+			                       \vdots                \\
+			                       c_{nk}(\xi_k-\zeta_k)
+		                       \end{bmatrix}}
+\end{align}
+and then by definition of the two norm:
+\begin{align}
+	=\sum_{k=1}^n\sqrt{\sum_{j=1}^n(c_j(\xi_j-\zeta_k))^2}
+\end{align}
+So that is how we were able to pull out the sum. Is because there was a hidden two norm.
+
+\end{document}

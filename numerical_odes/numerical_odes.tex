@@ -1,0 +1,232 @@
+\documentclass[12pt]{article}
+% This package simply sets the margins to be 1 inch.
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{marvosym}% This adds the contradiction command (\Lightning)
+% These packages include nice commands from AMS-LaTeX
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Define an environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+
+% define shortcut commands for commonly used symbols
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\nR}{\mathcal{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\xk}{x_k}
+\newcommand{\yk}{y_k}
+\newtheorem*{remark}{Remark}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\begin{document}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Numerical Methods for Ordinary Differential Equations
+\end{center}
+
+\section{Review of Taylor Series}
+Recall that the Taylor Series of a function $f$ around a point $x_0$ is:
+\begin{align}
+	f(x)=f(x_0)+f'(x_0)(x-x_0)++\dots ((x-x_0)^n)/(n!)f^{(n)}(x_0)\frac{+((x-x_0)^{n+1})}{(n+1)!}f^{(n+1)}(\xi_n)
+\end{align}
+\begin{proof}
+	Assume that $f\in C^{(n+1)}(\R)$ then note that:
+	\begin{align}
+		f(x)=f(x_0)+f(x)-f(x_0) \\
+		=f(x_0)+\int_{x_0}^xf'(s)ds
+	\end{align}
+	\begin{align}
+		\frac{2}{3} = \frac{6}{9}
+		\displaystyle\int_{2}^{}
+		\infty{s}
+	\end{align}
+
+	if we were to stop here we could apply the integral mean value theorem to obtain:
+	\begin{equation}
+		=f(x_0)+f'(\xi)\int_{x_0}^x ds \\
+		=f(x_0)+(x-x_0)f'(\xi)
+	\end{equation}
+	However we could have opted to do integration by parts. Define $v=(x-s)$ then:
+	\begin{align}
+		f(x_0)+\int_{x_0}^xf'(s)ds                                           \\
+		=f(x_0)-(x-x)f'(x)+(x-s)f'(x_0)+\int_{x_0}^x\left(x-s\right)f''(s)ds \\
+		=f(x_0)+(x-x_0)f'(x_0)+\int_{x_0}^x(x-s)f''(s)d
+	\end{align}
+	And by induction we can raise expand this however far out we desire.
+\end{proof}
+\begin{remark}[Special Case of Taylor expansion]
+	It is worth noting that often it is advantageous to expand the function
+	\begin{equation}
+		f(x+\Delta x)
+	\end{equation}
+	around x itself (consider this a function of $\Delta x$) then we get:
+	\begin{align}
+		f(x+\Delta x)=f(x)+\Delta xf'(x)+\sum_{k=2}^\infty \Delta x^k f^{(n)}(x)
+	\end{align}
+	This will be especially important when discussing how well numerical methods approximate a solution.
+\end{remark}
+
+\section{Finite Difference Methods}
+Before discussing numerical approximations to solutions of differential equations (using some form of a discrete integral operator) it is often useful to understand how to numerically approximate a derivative.
+
+One obvious way of approximating the derivative is to take the standard definition:
+\begin{align}
+	\lim_{h\rightarrow \infty} (f(x+h)-f(x))/h
+\end{align}
+and choose some small h so that:
+
+
+\begin{align}
+	f'(x)\approx \frac{f(x+h)-f(x)}{h}
+\end{align}
+This is known as a forward difference. With this particular example we expect the error to decrease linaerly as we make $h$ smaller. This can be proven by observing:
+\begin{align}
+	\frac{f(x+h)-f(x)}{h} \\
+	=\frac{f(x)+hf'(x)+O(h^2)-f(x)}{h}=O(h)
+\end{align}
+Where $O(h^p)$ denote anything that shrinked smaller than or the same as $Ch^p$ for some constant C.
+
+\begin{remark}[Big O]
+
+	This notation is called Big O notation. Typically in computer science it is used to describe how something grows as $h\rightarrow \infty$ so for example $h^p=O(h^q)$ for $q<p$. Essentially saying that smaller polynomials grow slower than larger ones. However in our context we want to understand behavior as $h\rightarrow 0$ so in this case $h^q=O(h^p)$ in that larger polynomials shrink at least as faster as smaller onesl.
+\end{remark}
+We have shown that the forward difference typically has linearly shrinking errors. more generally we can devise higher order methods by constructing sums of the form:
+\begin{align}
+	\sum_i c_if(x_i)
+\end{align}
+so that when expanding $f(x_i)=f(x+ch)$ as a power series we cancel out as many terms as possible in the taylor series while retaining the original $f'(x)$. This can be reformulated as a system of equations (where we want to approximate the $k^\text{th}$ derivative)
+\begin{align}
+	\frac{1}{(i-1)!}\sum_{j=1}^nc_j(x_j-x)^{i-1}=\begin{cases}
+		                                             1 & \text{if }i-1=k \\
+		                                             0
+	                                             \end{cases}
+\end{align}
+For $i=1,\dots,n$
+
+\section{Solving BVPs with Finite Differences}
+\subsection{Heat Equation}
+
+Consider the setup:
+\begin{align}
+	u_{xx}(x)=f(x), u(0)=\alpha,u(1)=\beta
+\end{align}
+The classic heat equation with Dirichlet Boundary conditions (no time for now). If we first discretive the interval $[0,1]$ into $0=x_0,\dots,x_{m+1}=1$ then if $U_j$ is the solution to this ode at any particular point we should expect:
+\begin{align}
+	\frac{U_{j-1}-2U_j+U_{j+1}}{h}\approx f(x_i)
+\end{align}
+Using the finite difference approximation to the second derivative.
+
+Using this fact and the fact that $U_0=\alpha, U_{m+1}=\beta$ (by the boundary conditions) we have the following system of equations:
+\begin{align}
+	A=\frac{1}{h^2}\begin{bmatrix}
+		               h^2    & 0      & 0      & 0      & \dots  & 0      & 0      & 0      \\
+		               1      & -2     & 1      & 0      & \dots  & 0      & 0      & 0      \\
+		               0      & 1      & -2     & 1      & \dots  & 0      & 0      & 0      \\
+		               \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+		               0      & 0      & 0      & 0      & \dots  & 1      & -2     & 1      \\
+		               0      & 0      & 0      & 0      & \dots  & 0      & 0      & h^2
+	               \end{bmatrix} \\
+	AU=\begin{bmatrix}
+		   \alpha \\
+		   f(x_1) \\
+		   \vdots \\
+		   f(x_m) \\
+		   \beta
+	   \end{bmatrix}
+\end{align}
+We want to understand how well our solution $U$ approximates the actual solution $u$. One potential method of doing this is by measuring the local truncation error. This is defined as:
+\begin{align}
+	\tau_j=g(u(x_1),\dots, u(x_j)\dots, u(x_m))-u''(x_j) \\
+	=g(u(x_1),\dots, u(x_j)\dots, u(x_m))-f(x_j)
+\end{align}
+Where $g$ is our approximation to the second order derivative. Typically when deriving this we only care about the big-O and what order it is (say $O(h^p)$) and we say that $\tau_j=O(h^p)$. Note that in this definition we assume we know u and expand each taylor series on u not $U$
+
+in vector form this is written (for our particular choice of g):
+\begin{align}
+	\tau=Au(x)-F \\
+	Au(x)=F+\tau
+\end{align}
+if we define the error as $E=U-u(x)$ then:
+\begin{align}
+	AE=-\tau \\
+	\norm{E}\leq \norm{A^{-1}}\norm{\tau}
+\end{align}
+What we want eventually is to guarantee that $\norm{E}\rightarrow 0$ as $h\rightarrow 0$. To do this we need to know two things: $\norm{A^{-1}}<C$ independent of h (stable), and $\norm{\tau}\rightarrow 0$ (guaranteed by $O(h^p)$).
+
+\subsubsection{Stability in 2-norm}
+Basically we can bound the inverse of the matrix by its smallest largest eigenvalue (smallest of the original matrix). Whats cool in this case is that the eigenvectors of this operator are just the eigenfunctions of the second derivative operator evaluated at the grid points. The eigenvalues are almost the same (they have some $O(h^2)$) error.
+
+I won't go through the derivation here. Essentially what you do is show how the smallest eigenvalue of $A$ is bounded away from zero, thus the largest eigenvalue of $A^{-1}$ is bounded and we get stability.
+
+\subsubsection{Green's functions and stability in $\infty$ norm}
+
+So there are a bunch of ways for solving for Greens functions. I do not make an exhaustive list but i give my method:
+
+First take $\frac{d^2}{dx^2}G=\delta (x-x_0)$ and solve $G_{xx}=0$ on both sides of $x_0$ so you will have two functions, one for $x<x_0$ and another for $x>x_0$. From here we will have $4$ unknowns and only 2 equations (the boundary values). We can then enforce continuity to give a third equation, and lastly ensure that  the derivative from the right of $G$ is one greater than the derivative on the left (Enforcing the dirac delta). In this way the resulting functiokn is continuous but not necessarily differentiable at $x_0$
+
+In the case of the heat equation the greens function turns out to be:
+\begin{align}
+	G(x,x_0)=\begin{cases}
+		         (x_0-1)x & \text{for }0\leq x\leq x_0 \\
+		         x_0(x-1) & \text{otherwise}
+	         \end{cases}
+\end{align}
+Note that then if f is a discrete sum of delta functions that the solution to the BVP is then:
+\begin{align}
+	f(x)=\sum_{k=1}^nc_k\delta (x-x_k) \\
+	u=\sum_{k=1}^nc_kG(x,x_k)
+\end{align}
+however if f is just a normal function we could integrate in much the same way:
+\begin{align}
+	u(x)=\alpha (1-x)+ \beta(x) +\int_0^1 f(t)G(x,t)dt
+\end{align}
+In this way $G$ almost acts as a right inverse to the differential operator in this case. Then we add in the boundary values.
+
+If we want to make an extension to the discrete world we want to find $AB=I$ where B is like the right inverse to our discrete differential operator.
+
+It turns out that the first collumn of B corresponds to $(1-x_j)$ (our first boundary function) evaluated at the grid points whereas the last corresponds to $x_j$ (our second boundary condition) evaluated at the grid points. All of the interior collumns correpsond to greens functions at centered at each grid point, evaluated at the grid points. So the solution essentially loolks like:
+\begin{align}
+	U=\alpha B_0 +\beta B_{m+1}+\sum\limits_{k=1}^{m}\left(f_kB_k\right)
+\end{align}
+Looking Familiar?? In fact solving this equation is exactly the same as just assuming :
+$f(x)\approx h\sum\limits_{i=1}^{m}\left(f(x_i)\delta(x-x_i)\right)$
+
+Relating this to max norms, it is pretty simple to observe that the row sums of B are bounded above by $3$ regardless of h. So this finite difference method is stable in the infinity norm and the error is $E=O(h^2)$ corresponding to the LTE.
+\section{Proof of trapezoidal method area of absolute stability}
+\begin{align}
+	|\frac{1+\frac{z}{2}}{1-\frac{z}{2}}|\leq 1                                              \\
+	|\frac{1+\frac{z}{2}}{1-\frac{z}{2}}|^2\leq 1                                            \\
+	(1+\frac{z}{2})(1+\frac{\tilde z }{2})\leq (1-\frac{z}{2})(1-\frac{\tilde z }{2})        \\
+	1 + \frac{z+\tilde z}{2} + \frac{|z|^2}{4}\leq 1-\frac{z+\tilde z}{2} + \frac{|z|^2}{24} \\
+	\frac{z+\tilde z}{2} \leq -\frac{z+\tilde z}{2}                                          \\
+	\frac{\text{re}(z)}{2} \leq -\frac{\text{re}(z)}{2}                                      \\
+	\text{re}(z) \leq 0
+\end{align}
+\end{document}

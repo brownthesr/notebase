@@ -1,0 +1,468 @@
+
+\documentclass[12pt]{article}
+% This package simply sets the margins to be 1 inch.
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{marvosym}% This adds the contradiction command (\Lightning)
+% These packages include nice commands from AMS-LaTeX
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Define an environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+
+% define shortcut commands for commonly used symbols
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\nR}{\mathcal{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\xk}{x_k}
+\newcommand{\yk}{y_k}
+\newtheorem*{remark}{Remark}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\begin{document}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 2.1
+\begin{exercise}{2.1}
+	To prove first we prove that the inverse of a lower (upper) matrix is lower (upper) triangular.
+
+	Take some lower triangular matrix A. Call its inverse B. Then:
+	\begin{align}
+		AB=I
+	\end{align}
+	Writing out things by components:
+	\begin{align}
+		AB=[Ab_1,\dots, Ab_n]
+	\end{align}
+	So $Ab_k=e_k$. From this note that because of this we have $(Ab_k)_i=\sum_{j=1}^{i}A_{ij}(b_k)_j=0$  For $i< k$ (Note that since A is lower triangular we only sum up to i). In particular if $i=1<k$ then:
+	\begin{align}
+		(Ab_k)_1=A_{11}(b_k)_1=0
+	\end{align}
+	So for all of the collumns $k>1$ we know that $b_k$
+	\begin{align}
+		% 4 x 4 BMatrix 
+		\begin{bmatrix}
+			B_{11} & 0     & \dots  & 0     \\
+			B_{12} & \star & \star  & \star \\
+			\dots  & \dots & \ddots & \dots \\
+			\star  & \star & \star  & \star
+		\end{bmatrix}
+	\end{align}
+	We now prove this by induction that
+	\begin{align}
+		(b_{k})_1,\dots (b_{k})_{k-1}=0
+	\end{align}
+	The base case was handled above. Now assume that it is true for $1\leq r<k$ we now prove it for $r+1<k$
+
+	Take
+	\begin{align}
+		(Ab_k)_{r+1}=\sum_{j=1}^{n}(A_{r+1,j}(b_k)_j)                           \\
+		=\sum_{j=1}^{r+1}(A_{r+1,j}(b_k)_j) \text{ since A is lower triangular} \\
+		=A_{r+1,r+1}(b_k)_{r+1}\text{ induction}                                \\
+		=0 \text{ since }(e_k)_{r+1}=0
+	\end{align}
+	However since A is invertible $A_{r+1,r+1}\neq 0$ thus $b_{k}$ has zeros above the entry $k$.
+
+	As a result $B$ is lower triangular. so the statement follows. Similarly if A is upper triangular then $A^*$ is lower triangular with inverse $(A^{*})^{-1}$ That is also lower triangular. Thus $(A^{*})^{-1}=(A^{-1})^{*}$ is alos lower triangular so $A^{-1}$ is upper triangular.
+
+	Now to prove the main theorem. If A is unitary it is diagonal.
+
+	If A is lower triangular. Then its conjugate transpose is upper triangular. But by the previous theorem its inverse is lower triangular. Since it is hermetian its conjugate transpose is its inverse so it must be both upper and lower triangular. So it must be diagonal. As a result if its conjugate transpose is diagonal then so is A
+
+	Similarly if A is upper triangular its conjugate transpose is lower triangular but its inverse is upper. As a result its inverse is both upper and lower triangular so it must be diagonal. As a result if its cnojugate transpose is diagonal then so is A.
+\end{exercise}
+
+% Exercise 1.2
+\begin{exercise}{1.2}
+	a) To prove this take
+	\begin{align}
+		\norm{Ux}_2^2=\langle Ux,Ux\rangle                 \\
+		=x^{\star}U^{\star}Ux=x^\star x=\langle x,x\rangle \\
+		=\norm{x}_2^2
+	\end{align}
+	Taking square roots of both sides yields the theorem
+
+	b)
+	\begin{align}
+		\norm{UA}_2                                                                   \\
+		=\sup_{x}\frac{\norm{UAx}_2}{\norm{x}}                                        \\
+		=\sup_{x}\frac{\norm{U(Ax)}_2}{\norm{x}}                                      \\
+		=\sup_{x}\frac{\norm{Ax}_2}{\norm{x}} \text{by unitary invariance on vectors} \\
+		=\norm{A}_2
+	\end{align}
+	\begin{align}
+		\norm{AU}_2                                       \\
+		=\sup_{x}\frac{\norm{AUx}_2}{\norm{x}}            \\
+		=\sup_{x}\frac{\norm{A(Ux)}_2}{\norm{U^{-1}(Ux)}} \\
+		=\sup_{y}\frac{\norm{A(y)}_2}{\norm{U^{-1}(y)}}   \\
+		=\sup_{y}\frac{\norm{A(y)}_2}{\norm{(y)}}         \\
+		=\norm{A}
+	\end{align}
+	So it is unitarily invariant.
+
+	c) Take the frobenius norm:
+	\begin{align}
+		\norm{UA}_F=\sqrt{\text{trace}((UA)^{\star}UA)} \\
+		=\sqrt{\text{trace}(A^{\star}U^\star UA)}       \\
+		=\sqrt{\text{trace}(A^\star A)}                 \\
+		\norm{A}_F
+	\end{align}
+	Similarly we can do:
+	\begin{align}
+		\norm{AU}_F=\sqrt{\text{trace}(AU(AU)^{*})} \\
+		=\sqrt{\text{trace}(AU U^*A^*)}             \\
+		=\sqrt{\text{trace}(A A^*)}                 \\
+		\norm{A}_F
+	\end{align}
+	So it is unitarily invariant.
+
+	d) This is not quite the same as unitary but the same proof follows:
+	\begin{align}
+		\norm{Wx}_2^2=\langle Wx,Wx\rangle                 \\
+		=x^{\star}W^{\star}Wx=x^\star x=\langle x,x\rangle \\
+		=\norm{x}_2^2
+	\end{align}
+	Again taking square roots afterwards yields the theorem.
+\end{exercise}
+
+% Exercise 2.3
+\begin{exercise}{2.3}
+	To prove this Assume the the projector is hermitian then, Note that $P$ projects to the range and $I-P$ projects to the null space. We show that any two vectors in this are orthogonal
+	\begin{align}
+		\langle Py, (I-P)x\rangle            \\
+		=y^*P^*(I-P)x=y^*P(I-P)x=y^*(P-P^2)x \\
+		=y^*(P-P)x=0
+	\end{align}
+	So the range and null space are orthogonal.
+
+	To prove the other direction. Assume that the range and null space are orthogonal. construct and orthonormal basis for the range and null space note that since the dimension of range and null space add up to the dimension of the whole space (and they are orthogonal by assumption) then this consitutes an orthonormal basis for the whole space
+
+	Basis for range $q_1,\dots, q_k$, basis for null space $q_{k+1}\dots q_n$.
+
+	From this note that if a vector $q_j$ is in the range of P then:
+	\begin{align}
+		Px=q_j \text{ for some x} \\
+		P^2x=Pq_j                 \\
+		Px=Pq_j                   \\
+		q_j=Pq_j
+	\end{align}
+	So each vector in this basis is also an eigenvector with eigenvalue 1.
+
+	call this matrix Q then note that (if $q_k$) is in the range subseciton
+	\begin{align}
+		Q^{*}PQe_k=Q^*Pq_k \\
+		= Q^*q_k=e_k
+	\end{align}
+	if $q_k$ is in the null section of the basis:
+	\begin{align}
+		Q^{*}PQe_k=Q^*Pq_k \\
+		= 0
+	\end{align}
+	Thus $Q^*PQ=I_{k}$ where $I_k$ is the identity up until after k after which its zeros. so since Q is unitary:
+	\begin{align}
+		Q^*PQ=I_k \\
+		P=QI_kQ^* \\
+		P=Q_kQ_k^*
+	\end{align}
+	So P is thus hermitian since $P^*=(Q_kQ_k^*)^*=Q_kQ_k^*=P$. (Note that here $Q_k$ is Q excluding the last $k+1,n$ collumns).
+\end{exercise}
+
+% Exercise 2.4
+\begin{exercise}{2.4}
+	to show this we assume By way of contradiction that there are two projection matrices. P, Q
+
+	As an aside. From this note that if a vector $v$ is in the range of any projection P then:
+	\begin{align}
+		Px=v \text{ for some x} \\
+		P^2x=Pv                 \\
+		Px=Pv                   \\
+		v=Pv
+	\end{align}
+	So each vector in this basis is also an eigenvector with eigenvalue 1.
+
+	now moving on. We show that P and Q do the exact same thing to arbitrary vectors
+
+	Take some artbirary vector x. Note that sicne the space $\R^n$ is a direct sum of the range and null space we can write $x=v+w$ where $v\in$ the range and $w\in$ null space specified earlier.
+
+	then note that:
+	\begin{align}
+		P(x)=P(v+w)=Pv \text{ since w is in the null space of Q} \\
+		=v \text{ by earlier lemma}
+	\end{align}
+	similarly
+	\begin{align}
+		Q(x)=Q(v+w)=Qv \text{ since w is in the null space of Q} \\
+		=v \text{ by earlier lemma}
+	\end{align}
+	So they do the exact same thing to arbitrary vectors. So Q and P must be the same matrix.
+
+\end{exercise}
+
+% Exercise 2.5
+\begin{exercise}{2.5}
+
+	Assume that $w^\star u=-1$ then we show that this is singular:
+	\begin{align}
+		(I+uw^\star)u=u+uw^\star u=u+u(-1)=0
+	\end{align}
+	So $I+uw^\star$ must be singular.
+
+	Assume that it is singular then it must have a null space with some vector $v\neq 0$ in it:
+	\begin{align}
+		(I+uw^\star)v=0 \\
+		v=-uw^{\star}v  \\
+		w^\star v=-(w^\star u)w^{\star}v
+	\end{align}
+	Now note that if $w^\star v=0$ then $v-u(w^\star v)=0$ a contradiction. so $w^\star v\neq 0$. and as a result
+	\begin{align}
+		w^\star v=-(w^\star u)w^{\star}v
+		-(w^\star u)=1 \\
+		w^\star u = -1
+	\end{align}
+
+	b)take
+	\begin{align}
+		K=(I+uw^*)^{-1}-I  \\
+		(I+uw^*)K=I-I-uw^* \\
+		=-uw^\star         \\
+		\implies           \\
+		K=(-(I+uw^\star)^{-1}u)w^\star
+	\end{align}
+	Note that $(-(I+uw^\star)^{-1}u)=v$ is a vector so $K=vw^\star$ so it is rank one
+
+	c) by the previous exercise (just rearranings for the inverse) we know that there is a vector v with
+	\begin{align}
+		(I+uw^*)^{-1}=K+I=vw^*+I
+	\end{align}
+	We solve for v
+	\begin{align}
+		v=(-(I+uw^\star)^{-1}u)       \\
+		(I+uw^\star)v=(-u)            \\
+		v+uw^*v=(-u)                  \\
+		w^{*}v+w^*uw^*v=(-w^*u)       \\
+		(1+w^{*}u)w^{*}v=(-w^*u)      \\
+		w^{*}v=(-w^*u)/(1+w^{\star}u) \\
+	\end{align}
+	Since we know that $w^\star u\neq 0$
+	\begin{align}
+		v+uw^\star v=-u                       \\
+		v+u(-w^*u)/(1+w^{\star}u)=-u          \\
+		v=u((w^*u)/(1+w^{\star}u)-1)          \\
+		v=u(\frac{w^*u-1-w^*u}{1+w^{\star}u}) \\
+		v=u(\frac{-1}{1+w^{\star}u})          \\
+	\end{align}
+	So then we know that $(i+uw^*)^{-1}=\frac{-uw^*}{1+w^*u}+I$
+
+	d) To do this take:
+	\begin{align}
+		A+uw^*=A(I+A^{-1}uw^*)
+	\end{align}
+	Note that since A is invertible $A+uw^*$ is invertibel iff $(I+A^{-1}uw^*)$ is invertible. Thus by a previous part this is invertible iff $w^*(A^{-1}u)\neq -1$ (Since this is a rank one pertubation of the identity)
+
+	By a previous exercise we know that:
+	\begin{align}
+		(I+A^{-1}uw^*)^{-1}=I-\frac{(A^{-1}uw^*)}{1+w^*(A^{-1}u)}                                \\
+		(A+uw^*)^{-1}=(I+A^{-1}uw^*)^{-1}A^{-1}=A^{-1}-\frac{(A^{-1}uw^*)}{1+w^*(A^{-1}u)}A^{-1} \\
+	\end{align}
+\end{exercise}
+
+% Exercise 2.6
+\begin{exercise}{2.6}
+	To prove this first take some matrix:
+	\begin{align}
+		% 4 x 4 BMatrix 
+		P=\begin{bmatrix}
+			  1      & \alpha & \dots  & 0      \\
+			  0      & 0      & \dots  & 0      \\
+			  \vdots & \vdots & \ddots & \vdots \\
+			  0      & 0      & \dots  & 0
+		  \end{bmatrix}
+	\end{align}
+	Note that
+	\begin{align}
+		P^2=P
+	\end{align}
+	So it is a projection. We calculate the largest singular value to compute its 2 norm:
+	\begin{align}
+		PP^{H}                                                 \\
+		=\begin{bmatrix}
+			 1      & \alpha & \dots  & 0      \\
+			 0      & 0      & \dots  & 0      \\
+			 \vdots & \vdots & \ddots & \vdots \\
+			 0      & 0      & \dots  & 0
+		 \end{bmatrix}
+		\begin{bmatrix}
+			1                           & 0      & \dots  & 0      \\
+			\overline{          \alpha} & 0      & \dots  & 0      \\
+			\vdots                      & \vdots & \ddots & \vdots \\
+			0                           & 0      & \dots  & 0
+		\end{bmatrix} \\
+		=% 4 x 4 BMatrix 
+		\begin{bmatrix}
+			1+\norm{\alpha}^2 & 0 & 0 & 0 \\
+			0                 & 0 & 0 & 0 \\
+			0                 & 0 & 0 & 0 \\
+			0                 & 0 & 0 & 0
+		\end{bmatrix}
+	\end{align}
+	From here the largest singular value is clearly $\sqrt{1+\norm{\alpha^2}}$ we want this to be equal to M so:
+	\begin{align}
+		M^2=1+\norm{\alpha}^2 \\
+		\alpha=\sqrt{M^2-1}
+	\end{align}
+	So choose the matrix
+	\begin{align}
+		\begin{bmatrix}
+			1      & \sqrt{M^2-1} & \dots  & 0      \\
+			0      & 0            & \dots  & 0      \\
+			\vdots & \vdots       & \ddots & \vdots \\
+			0      & 0            & \dots  & 0
+		\end{bmatrix}
+	\end{align}
+\end{exercise}
+
+% Exercise 2.7
+\begin{exercise}{2.7}
+	To Do this let $v$ be an eigenvalue of $P$ then:
+	\begin{align}
+		Pv=\lambda v         \\
+		P^2v = \lambda Pv    \\
+		Pv=\lambda Pv        \\
+		\lambda v=\lambda^2v \\
+		\lambda(\lambda-1)v=0
+	\end{align}
+	Since v has to be nonzero. any eigenvalue of this matrix will either be zero or one. We prove later that the combined total geoemtric multiplicities is the dimension of the spcae.
+
+	Construct a basis for the range of $P$ call it $q_1,\dots, q_k$ and a basis for the null space of $q_{k+1},\dots,q_n$. Note that putting these two basis together constructs a basis for the whole space (however this is not necessarily a unitary basis) by the rank nullity theorem.
+
+	From this note that if a vector $q_j$ is in the range of P then:
+	\begin{align}
+		Px=q_j \text{ for some x} \\
+		P^2x=Pq_j                 \\
+		Px=Pq_j                   \\
+		q_j=Pq_j
+	\end{align}
+	So each vector in this basis is also an eigenvector with eigenvalue 1. (So the dimension of this eigenspace is simply the dimension of the range). However the dimension of the range and null space (which nicely just so happens to be the dimension of the zero eigenspace) add up to the dimension of the whole space (by the rank nullity theorem).
+
+	Written out ($E_\lambda$ is the eigenspace corresponding to eigenvalue $\lambda$)
+	\begin{align}
+		\dim E_0+\dim E_1=\dim \text{range} +\dim \text{null}=n
+	\end{align}
+	Additionally the algebraic multiplicites of each eigenvalue must add up to $n$. but since the geometric multiplicities of each eigenvalue can never add up to n, the only way for both sums to work is if the algebraic multiplicities equal the geoemtric ones. So since the multiplicities are the same it is diagonalizable. We also show this separately below.
+
+	then take:
+	\begin{align}
+		PQ=[Pq_1,\dots,Pq_k,Pq_{k+1},\dots, Pq_n] \\
+		=[q_1,\dots,q_k,0,\dots,0]                \\
+		=Q\Lambda
+	\end{align}
+	Where $\Lambda = I_k$ which is the identity up to entry k then zeros everywhere else. So this shows us an eigendecoposition $P=Q\Lambda Q^{-1}$.
+
+	So in total the eigenvectors of P correspond to vectors in the basis of the range (eigenvalue 1) and the vectors in the basis of the null space (eigenvalue 0). And the eigendecomposition is $P=Q\Lambda Q^{-1}$
+
+	Also since we didn't have any conditions on P, all projection matrices P are diagonalizable.
+\end{exercise}
+
+% Exercise 2.8
+\begin{exercise}{2.8}
+	Let $A=V_A\Lambda_B V^{-1}_A,B=V_B\Lambda_BV^{-1}_B$.
+
+	Call the giant matrix we were dealing with M. Then set $V=V_A\otimes V_B$ (Taking our best guess at what the eigenvectors would be) take:
+	\begin{align}
+		MV=% 1 x 1 BMatrix 
+		% 4 x 4 BMatrix 
+		\begin{bmatrix}
+			a_{1,1}B & a_{1,2}B & \dots  & a_{1,m}B \\
+			a_{2,1}B & a_{2,2}B & \dots  & a_{2,m}B \\
+			\vdots   & \vdots   & \ddots & \vdots   \\
+			a_{m,1}B & a_{m,2}B & \dots  & a_{m,m}B
+		\end{bmatrix}\begin{bmatrix}
+			             v_{1,1}V_B & v_{1,2}V_B & \dots  & v_{1,m}V_B \\
+			             v_{2,1}V_B & v_{2,2}V_B & \dots  & v_{2,m}V_B \\
+			             \vdots     & \vdots     & \ddots & \vdots     \\
+			             v_{m,1}V_B & v_{m,2}V_B & \dots  & v_{m,m}V_B
+		             \end{bmatrix}                                                       \\
+		=% 4 x 4 BMatrix 
+		% 4 x 4 BMatrix 
+		\begin{bmatrix}
+			\sum_{j=1}a_{1,j}v_{j,1}BV_B & \sum_{j=1}a_{1,j}v_{j,2}BV_B & \dots  & \sum_{j=1}a_{1,j}v_{j,m}BV_B \\
+			\sum_{j=1}a_{2,j}v_{j,1}BV_B & \sum_{j=1}a_{2,j}v_{j,2}BV_B & \dots  & \sum_{j=1}a_{2,j}v_{j,m}BV_B \\
+			\vdots                       & \vdots                       & \ddots & \vdots                       \\
+			\sum_{j=1}a_{m,j}v_{j,1}BV_B & \sum_{j=1}a_{m,j}v_{j,2}BV_B & \dots  & \sum_{j=1}a_{m,j}v_{j,m}BV_B\end{bmatrix} \\
+		=\begin{bmatrix}
+			 (\sum_{j=1}a_{1,j}v_{j,1})BV_B & (\sum_{j=1}a_{1,j}v_{j,2})BV_B & \dots  & (\sum_{j=1}a_{1,j}v_{j,m})BV_B \\
+			 (\sum_{j=1}a_{2,j}v_{j,1})BV_B & (\sum_{j=1}a_{2,j}v_{j,2})BV_B & \dots  & (\sum_{j=1}a_{2,j}v_{j,m})BV_B \\
+			 \vdots                         & \vdots                         & \ddots & \vdots                         \\
+			 (\sum_{j=1}a_{m,j}v_{j,1})BV_B & (\sum_{j=1}a_{m,j}v_{j,2})BV_B & \dots  & (\sum_{j=1}a_{m,j}v_{j,m})BV_B\end{bmatrix}
+	\end{align}
+	Where the lower case v in this case refers to entries of $V_A$ and the $\lambda_i$ refers to eigenvalues of A.. Note that
+
+	Now note that since each $v_{:,j}$ is an eigenvector of A with corresponding eigenvalue $\lambda_j$
+
+	\begin{align}
+		=\begin{bmatrix}
+			 (\lambda_1 v_{1,1})BV_B & (\lambda_2 v_{1,2})BV_B & \dots  & (\lambda_m v_{1,m})BV_B \\
+			 (\lambda_1 v_{2,1})BV_B & (\lambda_2 v_{2,2})BV_B & \dots  & (\lambda_m v_{2,m})BV_B \\
+			 \vdots                  & \vdots                  & \ddots & \vdots                  \\
+			 (\lambda_1 v_{m,1})BV_B & (\lambda_2 v_{m,2})BV_B & \dots  & (\lambda_m v_{m,m})BV_B\end{bmatrix}                         \\
+		=\begin{bmatrix}
+			 (\lambda_1 v_{1,1})V_B\Lambda_B & (\lambda_2 v_{1,2})V_B\Lambda_B & \dots  & (\lambda_m v_{1,m})V_B\Lambda_B \\
+			 (\lambda_1 v_{2,1})V_B\Lambda_B & (\lambda_2 v_{2,2})V_B\Lambda_B & \dots  & (\lambda_m v_{2,m})V_B\Lambda_B \\
+			 \vdots                          & \vdots                          & \ddots & \vdots                          \\
+			 (\lambda_1 v_{m,1})V_B\Lambda_B & (\lambda_2 v_{m,2})V_B\Lambda_B & \dots  & (\lambda_m v_{m,m})V_B\Lambda_B\end{bmatrix} \\
+		=\begin{bmatrix}
+			 (v_{1,1})V_B\lambda_1 \Lambda_B & (v_{1,2})V_B\lambda_2 \Lambda_B & \dots  & (v_{1,m})V_B\lambda_m \Lambda_B \\
+			 (v_{2,1})V_B\lambda_1 \Lambda_B & (v_{2,2})V_B\lambda_2 \Lambda_B & \dots  & (v_{2,m})V_B\lambda_m \Lambda_B \\
+			 \vdots                          & \vdots                          & \ddots & \vdots                          \\
+			 (v_{m,1})V_B\lambda_1 \Lambda_B & (v_{m,2})V_B\lambda_2 \Lambda_B & \dots  & (v_{m,m})V_B\lambda_m \Lambda_B\end{bmatrix} \\
+		=\begin{bmatrix}
+			 v_{1,1}V_B & v_{1,2}V_B & \dots  & v_{1,m}V_B \\
+			 v_{2,1}V_B & v_{2,2}V_B & \dots  & v_{2,m}V_B \\
+			 \vdots     & \vdots     & \ddots & \vdots     \\
+			 v_{m,1}V_B & v_{m,2}V_B & \dots  & v_{m,m}V_B
+		 \end{bmatrix} % 4 x 4 BMatrix 
+		\begin{bmatrix}
+			\lambda_1\Lambda_B & 0                  & \dots  & 0                  \\
+			0                  & \lambda_2\Lambda_B & \dots  & 0                  \\
+			\vdots             & \vdots             & \ddots & \vdots             \\
+			0                  & 0                  & \dots  & \lambda_m\Lambda_B
+		\end{bmatrix}
+		=V\Lambda
+	\end{align}
+	Where $\Lambda$ is now diagonal. So we have expressed our matrix M as an eigendecomposition
+	\begin{align}
+		MV=V\Lambda
+	\end{align}
+	So the eigenvector matrix is $V=V_A\otimes V_B$ with corresponding eigenvalues $\Lambda$ as defined above.
+\end{exercise}
+\end{document}

@@ -1,0 +1,199 @@
+
+\documentclass[12pt]{article}
+% This package simply sets the margins to be 1 inch.
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{marvosym}% This adds the contradiction command (\Lightning)
+% These packages include nice commands from AMS-LaTeX
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Define an environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+
+% define shortcut commands for commonly used symbols
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dt}{\Delta t}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\nR}{\mathcal{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\xk}{x_k}
+\newcommand{\yk}{y_k}
+\newcommand{\na}{n_A}
+\newcommand{\nb}{n_B}
+\newcommand{\nab}{n_{AB}}
+\newtheorem*{remark}{Remark}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\begin{document}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 1.8
+\begin{exercise}{1.8}
+	We need to show that this does not define a metric. There are two ways of doing this. One way is to show that positivity is not satisfied. Take Two sets in the metric space $A,B$ that have a nonempty intersection or $A\cap B\neq \empty$ but also are not the same (Say take $A=[0,1],B=[.5,1.5]$)
+
+	From this note that $D(A,B)=\inf_{\substack{a\in A\\b\in B}}d(a,b)=0$. If this were a metric that would mean that $A=B$, but that is clearly not the case by construction. So this is not a metric.
+
+	Alternate proof:
+
+	We show that the triangle inequality does not hold. Take three sets $A,B,C$ such that $A\cap B=\empty$ but $A\cap C\neq \empty, B\cap C\neq \empty$ Where $A\neq B\neq C$ (This could be $A=[0,1],B=[2,3],C=[.5,2.5]$)
+	From this it is easy to see that $D(A,B)> 0$ but $D(A,C)=0,D(C,B)=0$ so $D(A,B)> D(A,C)+D(C,B)$. So the triangle inequality breaks. (In our example $D(A,B)=1> D(A,C)+D(C,B)=0+0=0$)
+\end{exercise}
+
+% Exercise 2.10
+\begin{exercise}{2.10}
+	Before I prove this i prove a lemma that will make it easier. $x$ is a limit point of A iff $\exists x_n\in A, x_n\rightarrow x$.
+
+	pf: Assume x is a limit point. From this we know that every neighborhood contains at least one point $y\in A$. Choose a sequence of neighborhoods that are open balls $B(x,\frac{1}{n})$. Take each $x_n$ from each neighborhood in succession. Clearly $x_n\in A$ also $d(x,x_n)<\frac{1}{n}$. So $x_n\rightarrow x$.
+
+	in the other direction assume that $\exists x_n\in A,x_n\rightarrow x$. Take some arbitrary neighborhood of $x$, call it K. Since K is a neighborhood it contains an epsilon neighborhood of $x$ of radius some $\epsilon$.
+
+	Since $x_n\rightarrow x$ we can choose an N such that $d(x,x_n)<\frac{\epsilon}{2}$ for $n>N$. Thus $x_n\in K$ since it is within this epsilon neighborhood. and since $x_n\in A$ by assumption then $x$ is a limit point.
+
+	Now we prove the main theorem that $x\in \overline{A}\iff d(x,A)=0$
+
+	pf:
+
+	Assume that $x\in \overline{A}$. From this we know that either $x\in A$ or $x$ is a limit point of A.
+
+	Case 1: $x\in A$. From this $D(x,A)=0$ since x is a part of $A$.
+
+	Case 2: $x$ is a limit point of A. since x is a limit point of A, we can construct a sequence of elements $x_n\in A$ such that $x_n\rightarrow x$. Because $x_n\rightarrow x$. we can choose a N such that for $m>N$ $d(x_m,x)<\epsilon$. from this we can make the distance from any point in A as small as we want. Written formally:
+
+	\begin{align}
+		D(x,A)=\inf_{y\in A}d(x,y)\leq d(x,x_m)<\epsilon
+	\end{align}
+	Since epsilon was arbitrary. we then know that we can send this to zero so $D(x,A)=0$
+
+
+	Now we prove the other direction. Assume that $D(x,A)=0$. This means that for every $\epsilon, \exists y\in A, d(x,y)<\epsilon$  Generate a sequence by choosing $x_n$ such that $d(x,x_n)< \frac{1}{n}$. From this we generate a convergent sequence. So x is a limit point of A and this a part of $\overline{A}$
+\end{exercise}
+
+% Exercise 4.4
+\begin{exercise}{4.4}
+	By the the definition of a cauchy sequence we know that for any $\epsilon$ we can choose an N so that for $n,m>N,d(x_n,x_m)<\epsilon$. In particular choose $\epsilon=1$.
+
+	Now take some element in the sequence $x_L$. Now for $d(x_0,x_L)$. if $L>N$ then:
+	\begin{align}
+		d(x_0,x_n)\leq \sum\limits_{k=1}^{N}\left(d(x_{k-1},x_k)\right)+d(x_{N+1},x_L) \\
+		\leq  \sum\limits_{k=1}^{N}\left(d(x_{k-1},x_k)\right)+1
+	\end{align}
+	This follows from the triangle inequality and what we chose for $\epsilon$. Similarly if $L\leq N$ then:
+	\begin{align}
+		d(x_0,x_n)\leq \sum\limits_{k=1}^{L}\left(d(x_{k-1},x_k)\right) \\
+		\leq  \sum\limits_{k=1}^{N}\left(d(x_{k-1},x_k)\right)+1
+	\end{align}
+	Either way $d(x_0,x_L)\leq M$ where $M=\sum\limits_{k=1}^{N}\left(d(x_{k-1},x_k)\right)+1$.
+
+	Thus if we take the $\overline {B(x_0,M)}$ then we know that the entire sequence is contained within this ball. since $d(x_0,x_L)\leq M$
+
+	So every cauchy sequence is bounded.
+\end{exercise}
+
+
+% Exercise 5.8
+\begin{exercise}{5.8}
+	I am assuming that we are using the supremum metric.
+
+	There are a couple of ways to do this. In theorem 1.4-7 we proved that if $M$ si a subset of a complete metric space it itself is complete if and only if M is closed. So we just need to show that M is closed or that it contains all of its accumulation points because we already know that $C[a,b]$ is complete by 1.5-5
+
+	Let $x_n$ be a convergetn sequence in $C[a,b],x(a)=x(b)$. We just need to show that its limit is also in this space.
+
+	First note that
+	\begin{align}
+		d(x(b),x(a))\leq d(x(b),x_n(b))+d(x_n(b),x_n(a))+d(x_n(a),x(a)) \\
+		= d(x(b),x_n(b))+d(x_n(a),x(a))                                 \\
+		= \max_t d(x(x),x_n(t))+d(x_n(a),x(a))                          \\
+		\leq 2\max_t d(x(t),x_n(t)) = 2d(x_n,x)
+	\end{align}
+	Note we were able to express the distance between $x(b),x(a)$ in terms of the distance between the two functions themselves. Since $x_n\rightarrow x$ we can choose N such that for $n>N,d(x_n,x)<\epsilon/2$
+	\begin{align}
+		= 2d(x_n,x)
+		< \frac{2\epsilon}{2}=\epsilon
+	\end{align}
+	So rthe distance between $d(x(a),x(b))<\epsilon$ for arbitary epsilon. Thus $x(a)=x(b)$.
+
+	furthermore we know that x is continuous, as a proof for some $c\in (a,b)$ take some sequence $x_n$ that converges to x. Take $t$ in a delta neighborhood of x
+	\begin{align}
+		d(x(c),x(t))\leq d(x(c),x_n(c))+d(x_n(c),x_n(t))+d(x_n(t),x(t))  \\
+		\leq  d(x(c),x_n(c))+d(x_n(c),x_n(t))+\max_sd(x_n(s),x(s))       \\
+		\leq  \max_sd(x(s),x_n(s))+d(x_n(c),x_n(t))+\max_sd(x_n(s),x(s)) \\
+		\leq  2\max_sd(x(s),x_n(s))+d(x_n(c),x_n(t))                     \\
+		\leq  2\max_sd(x(s),x_n(s))+d(x_n(c),x_n(t))                     \\
+		\leq  2d(x,x_n)+d(x_n(c),x_n(t))                                 \\
+	\end{align}
+	From here choose $N$ such that for $n>N$ $d(x,x_n)< \frac{\epsilon}{4}$. We can do this since $x_n\rightarrow x$. Furthermore we will choose the delta of $d(c,t)<\delta$ such that $d(x_n(c),x_n(t))<\frac{\epsilon}{2}$
+
+	Thus we have:
+	\begin{align}
+		< \frac{2}{4}\epsilon + \frac{\epsilon}{2}=\epsilon
+	\end{align}
+
+	Thus we see that $x$ is continuous.
+
+	Thus any convergent sequence converges to something within this new space. So it is closed (it contains all of its limit points). Thus by 1.4-7 this space is complete.
+\end{exercise}
+
+% Exercise 6.6
+\begin{exercise}{6.6}
+	To do this we need to come up with a mapping $T:C[0,1]\rightarrow C[a,b]$ that is an isometry and bijective.
+
+	Take $f\in C[0,1]$ then define T as
+	\begin{align}
+		(Tf)(t)= f((b-a)t+a)
+	\end{align}
+	First of all this function is bijective. This can be seen because the inverse is:
+	\begin{align}
+		(T^{-1}f)(t)=f(\frac{t-a}{b-a})    \\
+		(T^{-1}(Tf))(t)=T^{-1} f((b-a)t+a) \\
+		=f((((b-a)t+a)-a)/(b-a))= f(t)
+	\end{align}
+	So this function bijective. between the two spaces we now show that it is an isometry.
+
+	Take two continuous function on $[0,1]$
+	\begin{align}
+		\tilde d (Tx,Ty)=\sup_{t\in [a,b]} |Tx(t)-Ty(t)| \\
+		=\sup_{t\in [a,b]}|x((b-a)t+a)-y((b-a)t+a)|
+	\end{align}
+	if we perform an s substitution this leaves us with:
+	\begin{align}
+		=\sup_{t\in [0,1]}|x(t)-y(t)|=d(x,y)
+	\end{align}
+	Thus this is an isometry
+
+	\begin{proof}[Brief description]
+		this is how it is proved
+		\begin{align}
+			a^2+b^2=c^2
+		\end{align}
+	\end{proof}
+\end{exercise}
+
+\end{document}
