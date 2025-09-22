@@ -31,7 +31,9 @@ with open("TODOs.md", "w", encoding="utf-8") as md:
     for subsystem in sorted(matches):
         md.write(f"## {subsystem}\n\n")
         for file, lineno, text in matches[subsystem]:
+            if text == "":
+                text = "(empty line)"
             md.write(f"- **{file}:{lineno}** — `{text}`\n")
-        md.write("\n")
+        md.write("\n")  # ensure extra newline between subsystems
 
 print("✅ TODOs.md created.")
