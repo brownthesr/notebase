@@ -335,8 +335,11 @@
 	\end{align}
 	which multiplied out is:
 	\begin{align}
-		\begin{pmatrix}\left(\left(-2/\rho\right)e^{-\frac{\rho}{2}t}t+\left(-4/\rho^2\right)e^{-\frac{\rho}{2}t}\right)\left(-\rho^2/4\right) & \left(-2/\rho\right)e^{-\frac{\rho}{2}t}+\left(\left(-2/\rho\right)e^{-\frac{\rho}{2}t}t+\left(-4/\rho^2\right)e^{-\frac{\rho}{2}t}\right)\left(-\rho/2\right) \\
-               e^{-\frac{\rho t}{2}}t\left(-\rho^2/4\right)                                                                            & e^{-\frac{\rho t}{2}}+e^{-\frac{\rho t}{2}}t\left(-\rho/2\right)\end{pmatrix}
+		% 2 x 2 BMatrix 
+		\frac{1}{4}e^{-\rho t/2}\begin{bmatrix}
+			                        2(\rho t+2) & 4 t          \\
+			                        -\rho^2 t   & -2(\rho t-2)
+		                        \end{bmatrix}
 	\end{align}
 \end{exercise}
 
