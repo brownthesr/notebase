@@ -3,16 +3,14 @@ import os
 import re
 from collections import defaultdict
 
-# Regex for tags
-TAGS = ["TODO", "FIXME", "NOTE"]
-pattern = re.compile(rf"\b({'|'.join(TAGS)})\b", re.IGNORECASE)
+# Match TODO:, FIXME:, NOTE: anywhere in the line (case-sensitive)
+pattern = re.compile(r"(TODO:|FIXME:|NOTE:)")
 
-# Collect matches grouped by directory
 matches = defaultdict(list)
 
 for root, _, files in os.walk("."):
     for fname in files:
-        if fname.startswith(".") or "git" in root:  # skip hidden/git files
+        if fname.startswith(".") or "git" in root:
             continue
         path = os.path.join(root, fname)
         try:
@@ -23,7 +21,7 @@ for root, _, files in os.walk("."):
                         subsystem = os.path.dirname(rel_path) or "."
                         matches[subsystem].append((rel_path, lineno, line.strip()))
         except Exception:
-            pass  # skip binary or unreadable files
+            pass
 
 # Write markdown
 with open("TODOs.md", "w", encoding="utf-8") as md:
@@ -34,6 +32,6 @@ with open("TODOs.md", "w", encoding="utf-8") as md:
             if text == "":
                 text = "(empty line)"
             md.write(f"- **{file}:{lineno}** — `{text}`\n")
-        md.write("\n")  # ensure extra newline between subsystems
+        md.write("\n")
 
 print("✅ TODOs.md created.")
