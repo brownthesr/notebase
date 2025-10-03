@@ -8,6 +8,7 @@ import torch.nn as nn
 sigma = 3.1
 # Can pick sigma to be about 3.5 to match our eariler idea.
 b = 1.5
+rot = 0 * 2 * np.pi
 
 
 from matplotlib.textpath import TextPath
@@ -241,10 +242,10 @@ def loss_fn(model, x, eps=1e-5):
     z = torch.randn_like(x)  # standard normal
     X, Y = x[:, 0], x[:, 1]
     mean_X = torch.exp(-b * random_t) * (
-        X * torch.cos(2 * np.pi * random_t) - Y * torch.sin(2 * np.pi * random_t)
+        X * torch.cos(rot * random_t) - Y * torch.sin(rot * random_t)
     )
     mean_Y = torch.exp(-b * random_t) * (
-        X * torch.sin(2 * np.pi * random_t) + Y * torch.cos(2 * np.pi * random_t)
+        X * torch.sin(rot * random_t) + Y * torch.cos(rot * random_t)
     )
     perturbed_x = torch.stack([mean_X, mean_Y], dim=1) + std * z
     score = model(perturbed_x, random_t)
@@ -262,7 +263,8 @@ tqdm_epochs = tqdm.trange(epochs)
 for epoch in tqdm_epochs:
     optimizer.zero_grad()
     points = torch.Tensor(
-        sample_letters("Z", n_samples=1024, scale=3, spacing=1.2, seed=42)[0]
+        sample_letters("GS", n_samples=1024, scale=1.5, spacing=1.2, seed=42)[0]
+        # Scale 3 for one letter, scale 1.5 for 2
     )
     loss = loss_fn(model, points)
     loss.backward()
@@ -312,7 +314,7 @@ with torch.no_grad():
             x
             + (
                 (g**2)[:, None] * model(x, t_feed)
-                - (torch.Tensor([[-b, -2 * np.pi], [2 * np.pi, -b]]) @ x.T).T
+                - (torch.Tensor([[-b, -rot], [rot, -b]]) @ x.T).T
             )
             * dt
         )
@@ -324,4 +326,4 @@ with torch.no_grad():
 
     anim = FuncAnimation(fig, update, frames=len(t_range), interval=30, blit=True)
 
-    anim.save("reverse_sde_5.mp4", fps=90, dpi=150)
+    anim.save("grace.mp4", fps=90, dpi=150)
