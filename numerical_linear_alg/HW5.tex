@@ -282,7 +282,48 @@
 
 	Similarly for $AA^+$ recall that we reduced this to $UU^T$. We want this to be the $I_m$ identity. recall that $u$ is $m\times r$. So this can only be true if $U$ is full rank or we have at least m nonzero singular value of A. In which case U would be totally orthonormal with $UU^T=I_m$
 
-	e) (HELP, how does one do this?)
+	e) It is not a well conditioned operation take for example $A= % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & 0 \\
+			0 & 0
+		\end{bmatrix}$ and B $% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0 & 0        \\
+			0 & \epsilon
+		\end{bmatrix}$. Clearly $||A||_2=1,||B||=\epsilon$. So we have a small perturbation. additionally note that $A^+=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & 0 \\
+			0 & 0
+		\end{bmatrix}$ so that:
+	\begin{align}
+		\frac{||(A-B)^+-A^+||_2}{||A||_2} \\
+		=||(% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & 0        \\
+			0 & \epsilon
+		\end{bmatrix})^+-% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & 0 \\
+			0 & 0
+		\end{bmatrix}||                   \\
+		=||% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & 0                  \\
+			0 & \frac{1}{\epsilon}
+		\end{bmatrix}-% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			1 & 0 \\
+			0 & 0
+		\end{bmatrix}||                   \\
+		=||% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0 & 0                  \\
+			0 & \frac{1}{\epsilon}
+		\end{bmatrix}||            \\
+		=\frac{1}{\epsilon}
+	\end{align}
+	So what we find is that this operation here has condition number that grows uncontrollably as we send $\epsilon\rightarrow 0$. So we cannot control this growth. The idea (for me) is that when we are computing the psuedo inverse if we have something really close to zero then its sent to a very large number, but if it is zero its sent to zero. So we have this discrepancy that accounts for the gigantic condition number.
+
 
 \end{exercise}
 

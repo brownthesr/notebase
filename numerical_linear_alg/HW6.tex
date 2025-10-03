@@ -1,0 +1,427 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 6.1
+\begin{exercise}{6.1}
+
+	a) To prove this remember that from the last assignment we learned that $AA^+=UU^T$ so it is just a projection onto the collumn space of U (which is also the collumn space of A). furthermore this projection is hermitian since $(UU^T)^T=UU^T$ . So as a result this is an orthogonal projection onto the range of A. Since this is an orthogonal projection this is the distance minimizer from $b$ to the collumn space of A (by hw 4.5). So this is the unique minimizer
+	\begin{align}
+		AA^+b=UU^Tb
+	\end{align}
+
+	b) To do this note that the minimum of $||Ax-b||$ is the same as its norm squared:
+	\begin{align}
+		||Ax-b||^2                 \\
+		=\langle Ax-b, Ax-b\rangle \\
+		=x^*A^*Ax-b^*Ax-x^*A^*b+b^*b
+	\end{align}
+	from here note that to minimize this we can take derivatives:
+	\begin{align}
+		x^*(A^*A+A^*A)-b^*A-b^*A=0
+	\end{align}
+	to find the minimizer. From here note that we can do some simple algebra to get:
+	\begin{align}
+		x^*A^*A=b^*A
+	\end{align}
+	Taking transposes we arrive at:
+	\begin{align}
+		A^*Ax=A^*b
+	\end{align}
+	So any x that satisfies this equation will satisfy the first derivative test. Note that for the second derivative test we have:
+	\begin{align}
+		A^*A
+	\end{align}
+	Now note we want this matrix to be positive definite. We note that it is already semipositive definite by construction (since its a matrix multiplied by its transpose). We now note that if $n<m$ that this matrix must have full rank and will have no null space, so it will be positive definite
+
+	c)
+	For this part we plug in the pseudo inverse into the normal equations:
+	\begin{align}
+		A^*AA^+b=A^*b                                        \\
+		V\Sigma U^*U \Sigma V^*V\Sigma^{-1}U^*b=V\Sigma U^*b \\
+		V\Sigma^2V^*V^*\Sigma^{-1}U^*b=V\Sigma U^*b          \\
+		V\Sigma^2\Sigma^{-1}U^*b=V\Sigma U^* b               \\
+		V\Sigma U^*b=V\Sigma U^*b
+	\end{align}
+	So we can see that $A^+b$ satisfies the normal equations. if c is any other solution to the normal equations we need to somehow show that it has larger norm because they both satisfy the normal equations (set $x_0=A^*b$):
+	\begin{align}
+		A^*Ax_0=A^*b=A^*Ac \\
+		A^*A(x_0-c)=0
+	\end{align}
+	from here we can see that $x=x_0-c\in N(A^*A)$ (recall that the null space of $A^*A$ is the same as the null space of $A$ $Ax=0\implies A^*Ax=A^*0=0, A^*Ax=0\implies x^*A^*Ax=0\implies ||Ax||^2=0\implies Ax=0$). so x is in the null space of $A$. However recall that $x_0=A^+b$ lives in the collumn space of $V$ which is perpendicular to the null space of A (by the SVD, since the SVD V can be partitioned into $V_1,V_2$ where $V_2$ is the null space of A). Sowe have then that $c=x_0+x$ and $||c||^2=||x_0+x||^2=||x_0||^2+||x||^2\geq ||x_0||^2$ by the pythagorean theorem. Thus $x_0$ is the minimum normed among all solutions.
+\end{exercise}
+
+% Exercise 6.2
+\begin{exercise}{6.2}
+	For this problem I believe that we can prove $a\subset b\subset c\subset a$ which would imply that all three sets are equal. Set the shorthand for each set respectively to be $A,B,C$
+
+	proof of $A\subset B$
+
+	let $z\in A=\Lambda_\epsilon(A)$. This means that z is an eigenvalue with eigenvector v (of unit norm) of $A+\Delta A$ for some $||\Delta A||<\epsilon$. then take:
+	\begin{align}
+		||(A-zI)v||                     \\
+		=||(A+\Delta A-zI)v-\Delta Av|| \\
+		=||(A+\Delta A)v-zv-\Delta Av|| \\
+		=||zv-zv-\Delta Av||            \\
+		=||\Delta Av||                  \\
+		\leq ||\Delta A||||v||          \\
+		=||\Delta A||<\epsilon
+	\end{align}
+	So we thus know that $z\in B$
+
+	proof of $B\subset C$. recall that on an earlier assignment I proved that if v is unit norm that $||Av||\geq \frac{1}{||A^{-1}}||$ for invertible A. For completeness I prove this again:
+	\begin{align}
+		||A^{-1}x||\leq ||A^{-1}||||x||
+	\end{align}
+	setting $y=A^{-1}x, Ay=x$:
+	\begin{align}
+		||y||\leq ||A^{-1}||||Ay||
+	\end{align}
+	if $||y||=1$ then:
+	\begin{align}
+		||Ay||\geq \frac{1}{||A^{-1}||}
+	\end{align}
+
+	let $z\in B$ (also assume for the moment that $z\notin \Lambda A$) note then that we have that $||(A-zI)v||<\epsilon$ for some unit vector v. Since this was unit we can apply my previous lemma:
+	\begin{align}
+		\epsilon >||(A-zI)v||\geq \frac{1}{||(A-zI)^{-1}||}=\frac{1}{||-\text{res}_A(z)||}=\frac{1}{||\text{res}_A(z)||} \\
+		\frac{1}{\epsilon}<||\text{res}_A(z)||
+	\end{align}
+	so it is proven and $z\in C$. if $z\in \Lambda (A)$ then clearly its in B additionally $R_A(z)=\infty$ so it clearly must also be in C
+
+	proof of $C\subset A$ let $z\in C$ then
+	\begin{align}
+		\frac{1}{\epsilon}<||(zI-A)^{-1}|| \\
+		= ||(zI-A)^{-1}x||                 \\
+		\frac{1}{||(zI-A)^{-1}x||}<\epsilon
+	\end{align}
+	for some unit vector $x$. set $w=(zI-A)^{-1}x$. from here note that $zw-Aw=x,zw=Aw+x$. note note that we can set x by dividing by one to be: $x=x \frac{w^*w}{||w||^2}$ so then take:
+	\begin{align}
+		B=\frac{xw^*}{||w||^2} \\
+		||B||=||x||||w^*||/||w||^2\leq \epsilon
+	\end{align}
+	so this matrix B then satisfies the theorem for the pertubation matrix in a. from here rewrite:
+	\begin{align}
+		zw=Aw+x=Aw+Bw=(A+B)w
+	\end{align}
+	So then we have proved that $z\in A$
+
+
+
+\end{exercise}
+
+% Exercise 6.3
+\begin{exercise}{6.3}
+	This seems fun assume that $A$ is diagonalizable which means $A=V \Lambda V^{-1}$ then the resolvent is:
+	\begin{align}
+		R_A(z)=(zI-A)^{-1}           \\
+		=(zVV^{-1}-V \Lambda V^{-1}) \\
+		=(V(zI-\Lambda)V^{-1})^{-1}  \\
+		=V(zI-\Lambda)^{-1}V^{-1}
+	\end{align}
+	For now assume that this is not one of the eigenvalues of A otherwise the result is trivial.
+
+	Now note that by the assumptions in the theorem we have that $\overline{\lambda}\in \Lambda_\epsilon(A)$
+	if we take the norm of this we see that:
+	\begin{align}
+		\frac{1}{\epsilon}<||R_A(\overline{\lambda })||\leq ||V||||(\overline \lambda I-\Lambda)^{-1}||||V^{-1}|| \\
+		\leq \kappa(V)||(\overline \lambda I-\Lambda)^{-1}||
+	\end{align}
+	so
+	\begin{align}
+		\frac{1}{||(\overline \lambda I-\Lambda)^{-1}||}\leq \kappa(V)\epsilon                                                   \\
+		\text{by the fact that }\overline \lambda I-\Lambda \text{ is diagonal and invertible:} \overline \lambda \neq \lambda_i \\
+		\frac{1}{||\text{diag}\frac{1}{\overline \lambda-\lambda_i}||}\leq \kappa(V)\epsilon                                     \\
+		\frac{1}{\frac{1}{|\overline \lambda-\lambda_i|}}\leq \kappa(V)\epsilon \text{ for some i}                               \\
+		|\overline \lambda -\lambda_i|\leq \kappa(V)\epsilon
+	\end{align}
+	if $A$ is unitarily diagonalizable then $\kappa (V)=1$ so $|\overline \lambda -\lambda_i|<\epsilon$
+
+\end{exercise}
+
+% Exercise 6.4
+\begin{exercise}{6.4}
+
+	To do this we essentially need to prove that any any point in the process there is a nonzero element in the collumn below $\tilde a_{kk}$ in that either the pivot is already nonzero or we can swap one of the rows below it to get a nonzero pivot.
+
+	to do this we start with the base case. Assume that A is invertible. Then there must be at least one nonzero entry in the first collumn (the row below $a_{11}$ and including the original). If they were all zero then we would have a zero collumn and A would not be full collumn rank and hence not invertible. so there must be at least one nonzero entry in that collumn.
+
+	Say we have performed k steps of pivoting that means that:
+	\begin{align}
+		A=P_1L_1P_2L_2\dots P_kL_kA_k
+	\end{align}
+	Where $A_k$ is upper triangular in the first k rows. Assume that our gaussian elimination has worked so far as an inductive step. We need now to show that $(A_k)_{k,k:}$ (row collumn) this subcollumn has at least one nonzero entry. then we could pivot that row and continue.
+
+	To prove this note that since A is invertible then $\det(A)=\det(P_1)\det(L_1)\dots \det(P_k)\det(L_k)\det(A_k)\neq 0$. Since each $L_j,P_j$ are invertible then we get that $\det(A_k)\neq 0$ so $A_k$ must be invertible. Decompose $A_k=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			(A_{k})_{1:k-1,1:k-1} & *             \\
+			0                     & (A_k)_{k:,k:}
+		\end{bmatrix}$ (Note I am using numpy style annotations). From here since this is a block triangular matrix we know that $\det(A_k)=\det(B)\det(C)$ (Where B is the upper left block and C is the lower right block, this can be proved by noting that if a matrix K is upper block triangular). Since we assumed that gaussian elimination with partial pivoting worked thus far we know that $\det(B)\neq 0$. that implies that $\det(C)\neq 0$ or in other works this lower right hand block is invertible.
+
+	By a similar argument to the base case the first collumn of this submatrix must have a nonzero entry otherwise it would be rank deficient and have zero determinant. Thus there is a pivot we can pivot on at step $k+1$. So gaussian elimination with partial pivoting succeeds!
+\end{exercise}
+
+% Exercise 6.5
+\begin{exercise}{6.5}
+	to do this take:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			A & B \\
+			C & D
+		\end{bmatrix}=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & 0 \\
+			W & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			X & Y \\
+			0 & Z
+		\end{bmatrix} \\
+		=   % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			X  & Y    \\
+			WX & WY+Z
+		\end{bmatrix}
+	\end{align}
+	se we get that $X=A,B=Y,W=CX^{-1}=CA^{-1},Z=D-CA^{-1}B$
+
+	b) to prove this take the LU decompmosition:
+	\begin{align}
+		\det(M)=\det(L)\det(U)
+	\end{align}
+	note that L has the identity on its diagonal by construction above. so its determinant is zero so:
+	\begin{align}
+		\det(M)=\det(U)
+	\end{align}
+	Which we can compute by reducing U to a Diagonal and unit Upper form note that since we know that A and D are invertible then:
+	\begin{align}
+		U= % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			X & Y \\
+			0 & Z
+		\end{bmatrix} % 2 x 2 BMatrix 
+		\begin{bmatrix}
+			X & 0 \\
+			0 & Z
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & X^{-1}Y \\
+			0 & I
+		\end{bmatrix}
+	\end{align}
+	The determinant of this last matrix is just $1$ so we just need the determinant of this middle diagonal matrix which is given by:
+	\begin{align}
+		\det(X)\det(Z)=\det(A)\det(D-CA^{-1}B)=\det(A)\det(M/A)
+	\end{align}
+
+	c) Note in the decopmosition above we showed that:
+	\begin{align}
+		M=L\tilde{D}U \\
+		=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & 0 \\
+			W & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			X & 0 \\
+			0 & Z
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & X^{-1}Y \\
+			0 & I
+		\end{bmatrix}
+	\end{align}
+	which if we plug in values we get:
+	\begin{align}
+		M=L\tilde{D}U \\
+		=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I       & 0 \\
+			CA^{-1} & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			A & 0          \\
+			0 & D-CA^{-1}B
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & A^{-1}B \\
+			0 & I
+		\end{bmatrix}
+	\end{align}
+	From here note that since $A=A^*$ since M is hermitian then $A^{-*}=A^{-1}$. Thus we haev that in this decomposition :
+	\begin{align}
+		L=U^*
+	\end{align}
+	So as a result: for any arbitrary x we have:
+	\begin{align}
+		x^*L \tilde{D}Ux   \\
+		x^*U^* \tilde{D}Ux \\
+		y^*\tilde D u
+	\end{align}
+	So but now $\tilde D$ is a block diagonal with $A$ and $M/A$ on the diagonal. So clearly M is positive  definite iff the blocks are positive definite (Since we chose x to be artbirary and U is invertible so y is also arbitrary).
+
+
+	d)
+
+	for this problem consider the previous block decomposition $M=L \tilde{D}U$ once again:
+	\begin{align}
+		M % 2 x 1 BMatrix 
+		\begin{bmatrix}
+			x \\
+			y
+		\end{bmatrix}=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			f \\
+			g
+		\end{bmatrix} \\
+		% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			I       & 0 \\
+			CA^{-1} & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			A & 0          \\
+			0 & D-CA^{-1}B
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & A^{-1}B \\
+			0 & I
+		\end{bmatrix}
+		\begin{bmatrix}
+			x \\
+			y
+		\end{bmatrix}=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			f \\
+			g
+		\end{bmatrix} \\
+	\end{align}
+	now note that a fun fact is that the inverse of a unit lower triangular matrix is just a unit lower triangular matrix with the lower part negated giving:
+	\begin{align}
+		% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			A & 0          \\
+			0 & D-CA^{-1}B
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I & A^{-1}B \\
+			0 & I
+		\end{bmatrix}
+		\begin{bmatrix}
+			x \\
+			y
+		\end{bmatrix}=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			I        & 0 \\
+			-CA^{-1} & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			f \\
+			g
+		\end{bmatrix} \\
+	\end{align}
+	From this we can move forward by recalling that both A is invertible and $D-CA^{-1}B$ is invertible by a previous problem this gives:
+	\begin{align}
+		% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			I & A^{-1}B \\
+			0 & I
+		\end{bmatrix}
+		\begin{bmatrix}
+			x \\
+			y
+		\end{bmatrix}=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			A^{-1} & 0                 \\
+			0      & (D-CA^{-1}B)^{-1}
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I        & 0 \\
+			-CA^{-1} & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			f \\
+			g
+		\end{bmatrix} \\
+	\end{align}
+	similarly for an upper triangular matrix one can compute the inverse by just negating the upper bllock:
+	\begin{align}
+		% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			x \\
+			y
+		\end{bmatrix}=% 2 x 1 BMatrix 
+		\begin{bmatrix}
+			I & -A^{-1}B \\
+			0 & I
+		\end{bmatrix}
+		\begin{bmatrix}
+			A^{-1} & 0          \\
+			0      & (M/A)^{-1}
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			I        & 0 \\
+			-CA^{-1} & I
+		\end{bmatrix}% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			f \\
+			g
+		\end{bmatrix} \\
+	\end{align}
+\end{exercise}
+\end{document}

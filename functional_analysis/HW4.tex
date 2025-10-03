@@ -63,7 +63,9 @@
 \begin{exercise}{2.10.10}
 	We show there is some operator that is not bounded. Take some arbitrary hamel basis of $X$. Note that in general this basis will be infinitely dimensional, but we can take a subset of this basis that is countable.
 
-	Given this subset $e_k$. define $Te_k=ke_k$. We show that this operator is unbounded. take $||Te_k||=|k|||e_k||$ clearly this bound can grow to be as large as we want so this operator is unbounded. It doesn't matter what we define the operator on the rest of the hamel basis to be (it could even be zero), since it is unbounded on this subset the linear operator is unbounded. As a result there always exists an unbounded linear operator.
+	Since Y is not all zero. choose some nonzero vector $y_0\in Y$
+
+	Given this subset $e_k$. define $Te_k=ky_0$. We show that this operator is unbounded. take $||Te_k||=|k|||y_0||$ clearly this bound can grow to be as large as we want so this operator is unbounded. It doesn't matter what we define the operator on the rest of the hamel basis to be (it could even be zero, in fact we set it to zero and then extend to the rest of x), since it is unbounded on this subset the linear operator is unbounded. As a result there always exists an unbounded linear operator.
 \end{exercise}
 
 % Exercise 3.2.4
@@ -87,11 +89,11 @@
 		||x+\alpha y||^2\geq ||x||^2                                                                                                          \\
 		||x+\alpha y||\geq ||x||                                                                                                              \\
 	\end{align}
-	For the other direction assume that $||x+\alpha y||\geq ||x||$ then for this we take:
+	For the other direction assume that $||x+\alpha y||\geq ||x||$  for all scalars, then for this we take:
 	\begin{align}
-		||x||^2\leq ||x+\alpha y||^2=||x||^2- \overline{\alpha} \langle x, y\rangle -\alpha (\langle y, x\rangle - \overline{\alpha}\langle y, y\rangle ) \\
+		||x||^2\leq ||x+\alpha y||^2=||x||^2+ \overline{\alpha} \langle x, y\rangle +\alpha (\langle y, x\rangle + \overline{\alpha}\langle y, y\rangle ) \\
 	\end{align}
-	choosing $\overline{\alpha}=\frac{\langle y, x\rangle }{\langle y, y\rangle }$ then:
+	choosing $\overline{\alpha}=\frac{-\langle y, x\rangle }{\langle y, y\rangle }$ then:
 	\begin{align}
 		= ||x||^2-\frac{|\langle x, y\rangle |^2}{\langle y, y\rangle }
 	\end{align}
@@ -150,19 +152,27 @@
 \end{exercise}
 
 % Exercise 3.5.6
-\begin{exercise}{3.5.6} (HELP, do I need to take two separate limits? I believe that it would work out the exact same)
+\begin{exercise}{3.5.6}
 
 	take
 	\begin{align}
 		\langle x,y\rangle                                                                                                                                                \\
-		=\langle \lim_{n \rightarrow \infty}\sum\limits_{j=1}^{n}\left(\alpha_j\right)e_j, \lim_{n \rightarrow \infty}\sum\limits_{j=1}^{n}\left(\beta_j\right)e_j\rangle \\
+		=\langle \lim_{n \rightarrow \infty}\sum\limits_{j=1}^{n}\left(\alpha_j\right)e_j, \lim_{m \rightarrow \infty}\sum\limits_{j=1}^{m}\left(\beta_j\right)e_j\rangle \\
 	\end{align}
 	by continuity of inner product we can pull out the limits
 	\begin{align}
-		=\lim_{n \rightarrow \infty}\langle \sum\limits_{j=1}^{n}\left(\alpha_j\right)e_j, \sum\limits_{j=1}^{n}\left(\beta_j\right)e_j\rangle \\
-		=\lim_{n \rightarrow \infty}\sum_j^n\sum_k^n\langle \left(\alpha_j\right)e_j, \left(\beta_j\right)e_j\rangle                           \\
-		=\lim_{n \rightarrow \infty}\sum_k^n\alpha_k \overline{\beta_k}\rangle                                                                 \\
+		=\lim_{m \rightarrow \infty}\lim_{n \rightarrow \infty}\langle \sum\limits_{j=1}^{n}\left(\alpha_j\right)e_j, \sum\limits_{j=1}^{n}\left(\beta_j\right)e_j\rangle \\
+		=\lim_{m \rightarrow \infty}\lim_{n \rightarrow \infty}\sum_j^n\sum_k^m\langle \left(\alpha_j\right)e_j, \left(\beta_k\right)e_k\rangle                           \\
+		=\lim_{m \rightarrow \infty}\lim_{n \rightarrow \infty}\sum_j^n\sum_k^m\alpha_j\overline{\beta_k}\langle e_j, e_k\rangle                                          \\
+		=\lim_{m \rightarrow \infty}\lim_{n \rightarrow \infty}\sum_k^{\min(m,n)}\alpha_k \overline{\beta_k}                                                              \\
+		=\lim_{n \rightarrow \infty}\sum_k^{n}\alpha_k \overline{\beta_k}                                                                                                 \\
 	\end{align}
-	So thus it is proven
+	We are able to get rid of the double liimit because whenever $m>n$ (or vice versa) the all of the entries dot product to zero, so it suffices to take one limit
+
+	So thus it is proven. Furthermore we can show that this is absolutely convergent. To prove this recall that $\alpha_j=\langle e_j,x\rangle$ and the squared sum of this by bessels inequality is bounded. So this is in little l2 (because it works for any n). Similarly $\beta_j$ is also in little l2. So then notice we can apply cuachy shwarts to:
+	\begin{align}
+		\sum_{k}|\alpha_k \overline \beta_k|\leq ||\alpha||||\beta||
+	\end{align}
+	so it is bounded and hence absolutely convergent.
 \end{exercise}
 \end{document}

@@ -1,0 +1,210 @@
+\documentclass[12pt]{article}
+
+% Margins
+\usepackage[margin=1in]{geometry}
+
+% AMS math packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts,mathtools}
+
+% For contradiction symbol
+\usepackage{marvosym}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+
+% Common math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\calP}{\mathcal{P}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\vsspan}{span}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Floor/ceiling
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+% --- Theorem-style environments ---
+\newtheorem{theorem}{Theorem}[section] % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}     % same counter as theorems
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 \hspace{.05em}}}{}
+\newcommand{\tr}{\text{tr}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+	\textsc{Drake Brown}  \\
+	Date: Apr 14, 2025
+\end{flushright}
+\begin{center}
+	Homework 1
+\end{center}
+
+% Exercise 5.1
+\begin{exercise}{5.1}
+	To prove this one we first show that the cross product can be written as a matrix take:
+	\begin{align}
+		v\times x = % 3 x 1 BMatrix 
+		\begin{bmatrix}
+			v_2x_3-v_3x_2 \\
+			v_3x_1-v_1x_3 \\
+			v_1x_2-v_2x_1
+		\end{bmatrix} \\
+		=% 3 x 3 BMatrix 
+		\begin{bmatrix}
+			0    & -v_3 & v_2  \\
+			v_3  & 0    & -v_1 \\
+			-v_2 & v_1  & 0
+		\end{bmatrix}x
+	\end{align}
+	So calling this matrix A our differential equation is then:
+	\begin{align}
+		\dot{x}=Ax
+	\end{align}
+	We know how to solve this. its just the matrix exponential. Note that since this is skew symmetric it is obviously unitarily diagonalizable. So computing the characteristci polynomial is:
+	\begin{align}
+		\lambda^3+v_3^2\lambda+v_2^2\lambda +v_1^2\lambda=0 \\
+		\lambda(\lambda^2+v_3^2+v_2^2+v_1^2)=0
+	\end{align}
+	so one eigenvalue is $0$ and the other two are is $\lambda = \pm i \sqrt{v_1^2+v_2^2+v_3^2}=\pm i ||v||$.
+
+	The eigenvector corresponding to o is $% 3 x 1 BMatrix 
+		\frac{1}{||v||}\begin{bmatrix}
+			v_1 \\
+			v_2 \\
+			v_3
+		\end{bmatrix}$ which is interesting because its just the directino of the cross product (which makes sense since the cross product yields something about area so taking the same direction should be 0). Computing the other two eigenvectors:
+	\begin{align}
+		% 3 x 3 BMatrix 
+		\begin{bmatrix}
+			\mp i||v|| & -v_3        & v_2         \\
+			v_3        & \mp i ||v|| & -v_1        \\
+			-v_2       & v_1         & \mp i ||v||
+		\end{bmatrix}
+	\end{align}
+	computing the null space of the top row. we can choose $% 3 x 1 BMatrix 
+		\begin{bmatrix}
+			\mp v_1v_2-v_3 i||v|| \\
+			\pm v_1^2\pm v_3^2    \\
+			\mp v_2v_3+v_1 i ||v||
+		\end{bmatrix}$
+
+	One can quickly verify this works by plugging things in.
+
+	From this we can construct our V matrix to be:
+	\begin{align}
+		% 3 x 3 BMatrix 
+		\begin{bmatrix}
+			v_1 & v_1v_2       & -v_3||v|| \\
+			v_2 & -v_1^2-v_3^2 & 0         \\
+			v_3 & v_2v_3       & v_1||v||
+		\end{bmatrix}
+	\end{align}
+	This will convert us to the jordan normal block:
+	\begin{align}
+		% 3 x 3 BMatrix 
+		\begin{bmatrix}
+			0 & 0     & 0      \\
+			0 & 0     & -||v|| \\
+			0 & ||v|| & 0
+		\end{bmatrix}
+	\end{align}
+\end{exercise}
+
+% Exercise 5.2
+\begin{exercise}{5.2}
+	I am not sure how to realte this to the monodromy matrix but notice that we can rewrite this as the system:
+	\begin{align}
+		x=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0                    & 1 \\
+			-1-\epsilon \sin(3t) & 0
+		\end{bmatrix}x
+	\end{align}
+	this center matrix can also be written as:
+	\begin{align}
+		% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0  & 1 \\
+			-1 & 0
+		\end{bmatrix}+% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0                  & 0 \\
+			-\epsilon \sin(3t) & 0
+		\end{bmatrix}
+	\end{align}
+	notice that this final matrix has norm less than $\epsilon$ (the singular value is simply $\epsilon |\sin(3t)|$). this means that we can apply the bauer fike theorem which states that for $B\leq \epsilon$ any eigenvalue of $A+B$ satisfies $|\overline \lambda-\lambda|<\epsilon$ for some $\overline \lambda$ eigenvalue of A. Notice that the eigenvalues of $A$ are $\pm i$ we can then choose $\epsilon < .1$ to give us the following. Take the matrix $A+sB$. for $s\in [0,1]$. Since eigenvalue evaluation is a continuous function of the matrix and that the corresponding eigenvalue discs are disjoint (around $\pm i$) then one eigenvalue of $A+B$ will be in the top disc next to $i$ and the other will be in the bottom disc next to $-i$.
+
+	How do I relate this to the monodromy matrix?
+\end{exercise}
+
+% Exercise 5.3
+\begin{exercise}{5.3}
+	to do this problem rewrite this as a first order system:
+	\begin{align}
+		\dot{x}=% 2 x 2 BMatrix 
+		\begin{bmatrix}
+			0          & 1         \\
+			-\sin^2(t) & \cos^2(t)
+		\end{bmatrix}x
+	\end{align}
+	From class we learned that the sum the real parts of the floquet exponentials equals the integral of the trace or:
+	\begin{align}
+		re(\sum \gamma_j)=\frac{1}{T}\int_0^Ttr(A(s))ds \\
+		=\frac{1}{T}\int_0^T \cos^2(t)>0
+	\end{align}
+	which is strictly greater than zero. From this we know that at least one of the floquet exponentials must have positive real part. This means that the system is unstable and never has a bounded solution.
+\end{exercise}
+
+% Exercise 5.4
+\begin{exercise}{5.4}
+	for this problem take $w$ to be the eigenvector corresponding to 1 in the monodromy matrix. then set $z=\Phi(t)w$. Clearly this is a periodic solution because $z(t+T)=\Phi(t+T)w=\Phi(t)Mw=\Phi(t)w$.
+
+	next take y:
+	\begin{align}
+		\dot y = \dot x-\dot{(tz)}  \\
+		=A(t)x+b(t)-z-tA(t)z        \\
+		=A(t)y+A(t)tz+b(t)-z-tA(t)z \\
+		=A(t)y+b(t)-z(t)
+	\end{align}
+	So this is the differential equation that y satisfies. We now show that we can choose an initial condition for y to be peridodic, by duahamels (also note that $y(0)=x(0)$ by above formula)
+	\begin{align}
+		y(t)=\Phi(t)y_0+\int_0^t\Phi(t)\Phi^{-1}(s)(b(s)-z(s))ds           \\
+		y(t+T)=\Phi(t+T)y_0+\int_0^{t+T}\Phi(t+T)\Phi^{-1}(s)(b(s)-z(s))ds \\
+		y(t+T)=\Phi(t)My_0+\int_0^{t+T}\Phi(t)M\Phi^{-1}(s)(b(s)-z(s))ds   \\
+		y(t+T)=\Phi(t)(My_0+\int_0^{t+T}M\Phi^{-1}(s)(b(s)-z(s)))ds        \\
+	\end{align}
+	from here we just need to show that:
+	\begin{align}
+		My_0+\int_0^{t+T}M\Phi^{-1}(s)(b(s)-z(s))  =y_0+\int_0^T\Phi^{-1}(s)(b(s)-z(s))ds
+	\end{align}
+	from here recall that $\Phi(t+T)=\Phi(t)M,\Phi^{-1}(t+T)=M^{-1}\Phi(t)$ so Also set $y_0=w$
+	\begin{align}
+		My_0+\int_0^{t+T}M\Phi^{-1}(s)(b(s)-z(s))                                        \\
+		=y_0+\int_0^{t+T}M\Phi^{-1}(s)(b(s)-z(s))                                        \\
+		=y_0+\int_0^{T}M\Phi^{-1}(s)(b(s)-z(s))+\int_T^{T+t}M\Phi^{-1}(s)(b(s)-z(s))     \\
+		=y_0+\int_0^{T}M\Phi^{-1}(s)(b(s)-z(s))+\int_0^{t}M\Phi^{-1}(s+T)(b(s+T)-z(s+T)) \\
+		=y_0+\int_0^{T}M\Phi^{-1}(s)(b(s)-z(s))+\int_0^{t}MM^{-1}\Phi^{-1}(s)(b(s)-z(s)) \\
+		=y_0+\int_0^{T}M\Phi^{-1}(s)(b(s)-z(s))+\int_0^{t}\Phi^{-1}(s)(b(s)-z(s))        \\
+	\end{align}
+	Help How do I kill that final term?
+\end{exercise}
+
+
+\end{document}

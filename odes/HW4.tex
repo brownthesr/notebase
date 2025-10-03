@@ -232,18 +232,18 @@
 	\end{align}
 	So the general solution when $\rho^2<4\omega^2$ is:
 	\begin{align}
-		e^{At}=e^{\frac{\rho t}{2}}V\begin{bmatrix}
-			                            \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & -\sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) \\
-			                            \sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t)
-		                            \end{bmatrix}V^{-1}
+		e^{At}=e^{\frac{-\rho t}{2}}V\begin{bmatrix}
+			                             \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & -\sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) \\
+			                             \sin(\frac{\sqrt{4\omega^2-\rho^2}}{2} t) & \cos(\frac{\sqrt{4\omega^2-\rho^2}}{2} t)
+		                             \end{bmatrix}V^{-1}
 	\end{align}
 	which simplifies to:
 	\begin{align}
-		\begin{pmatrix}e^{-t\rho/2}\frac{\rho\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)+\cos \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)\sqrt{-\rho^2+4\omega^2}}{\sqrt{-\rho^2+4\omega^2}} & e^{-\rho t/2}\frac{2\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{-\rho^2+4\omega^2}}                                                                               \\
-               e^{-t\rho/2}\left(-\frac{2\omega^2\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{-\rho^2+4\omega^2}}\right)                                                            & e^{-t\rho/2}\frac{\cos \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)\sqrt{4\omega^2-\rho^2}-\rho\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{4\omega^2-\rho^2}}\end{pmatrix}
+		e^{-\rho \frac{t}{2}}\begin{pmatrix}\frac{\rho\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)+\cos \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)\sqrt{-\rho^2+4\omega^2}}{\sqrt{-\rho^2+4\omega^2}} & \frac{2\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{-\rho^2+4\omega^2}}                                                                                \\
+               \left(-\frac{2\omega^2\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{-\rho^2+4\omega^2}}\right)                                                            & \frac{\cos \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)\sqrt{4\omega^2-\rho^2}-\rho\sin \left(\frac{t\sqrt{-\rho^2+4\omega^2}}{2}\right)}{\sqrt{4\omega^2-\rho^2}}\end{pmatrix}
 	\end{align}
 
-	In the case where $\rho^2>4\omega^2$ then we will have two eigenvalues and two lineraly independet eigenvectors that are as stated before:
+	In the case where $\rho^2>4\omega^2$ then we will have two eigenvalues and two lineraly independent eigenvectors that are as stated before:
 	\begin{align}
 		V=\begin{bmatrix}
 			  \frac{-\rho+\sqrt{\rho^2-4\omega^2}}{2\omega^2} & \frac{-\rho-\sqrt{\rho^2-4\omega^2}}{2\omega^2} \\
